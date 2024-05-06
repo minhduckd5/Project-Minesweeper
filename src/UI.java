@@ -6,6 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import org.w3c.dom.events.MouseEvent;
+
 import javax.swing.JLabel;
 
 public class UI extends JPanel{
@@ -42,7 +45,7 @@ public class UI extends JPanel{
     private int allCells;
     private final JLabel status;
 
-    public Board(JLabel status) {
+    public UI(JLabel status) {
         this.status = status;
         initBoard();
     }
@@ -62,51 +65,111 @@ private void newGame(){
     var random = new Random();
     inGame = true;
     minesLeft = N_MINES;
-    allcells = N_ROWS * N_COLS;
-    field = new int[allcells];
 
-    for (int i = 0; i < allcells; i++) {
+    allCells = N_ROWS * N_COLS;
+    field = new int[allCells];
+
+    for (int i = 0; i < allCells; i++) {
         field[i] = COVER_FOR_CELL;
     }
     status.setText(Integer.toString(minesLeft));
 
     int i = 0;
 
-    while(i<N_MINES){
-        int position = (int) (allcells * random.nextDouble());
+    while (i < N_MINES) {
 
-        if((position < allcells) && (field[position] != COVERED_MINE_CELL)){
-            int current_col = position % N_COLS;
-            field[position] = COVERED_MINE_CELL;
-            i++;
+            int position = (int) (allCells * random.nextDouble());
 
-            if(current_col > 0){
-                cell = position - 1 - N_COLS;
-                if(cell >= 0 && field[cell] != COVERED_MINE_CELL){
-                    field[cell] += 1;
+            if ((position < allCells)
+                    && (field[position] != COVERED_MINE_CELL)) {
+
+                int current_col = position % N_COLS;
+                field[position] = COVERED_MINE_CELL;
+                i++;
+
+                if (current_col > 0) {
+                    cell = position - 1 - N_COLS;
+                    if (cell >= 0) {
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+                    cell = position - 1;
+                    if (cell >= 0) {
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+
+                    cell = position + N_COLS - 1;
+                    if (cell < allCells) {
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
                 }
-                cell += N_COLS;
-                if(cell < allcells && field[cell] != COVERED_MINE_CELL){
-                    field[cell] += 1;
+
+                cell = position - N_COLS;
+                if (cell >= 0) {
+                    if (field[cell] != COVERED_MINE_CELL) {
+                        field[cell] += 1;
+                    }
+                }
+
+                cell = position + N_COLS;
+                if (cell < allCells) {
+                    if (field[cell] != COVERED_MINE_CELL) {
+                        field[cell] += 1;
+                    }
+                }
+
+                if (current_col < (N_COLS - 1)) {
+                    cell = position - N_COLS + 1;
+                    if (cell >= 0) {
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+                    cell = position + N_COLS + 1;
+                    if (cell < allCells) {
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+                    cell = position + 1;
+                    if (cell < allCells) {
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
                 }
             }
-            cell = position - N_COLS;
-            if(cell >= 0 && field[cell] != COVERED_MINE_CELL){
-                field[cell] += 1;
+        }
+    }
+private void find_empty_cells(int j){
+    int current_col = j % N_COLS;
+    int cell;
+
+    if(current_col > 0){
+        cell = j - N_COLS - 1;
+        if(cell >= 0 && (field[cell] > MINE_CELL)){
+            field[cell] -= COVER_FOR_CELL;
+            if(field[cell] == EMPTY_CELL){
+                find_empty_cells(cell);
             }
-            cell = position + N_COLS;
-            if(cell < allcells && field[cell] != COVERED_MINE_CELL){
-                field[cell] += 1;
+        }
+        cell = j - 1;
+        if(cell >= 0 && (field[cell] > MINE_CELL)){
+            field[cell] -= COVER_FOR_CELL;
+            if(field[cell] == EMPTY_CELL){
+                find_empty_cells(cell);
             }
-            if(current_col < (N_COLS - 1)){
-                cell = position - N_COLS + 1;
-                if(cell >= 0 && field[cell] != COVERED_MINE_CELL){
-                    field[cell] += 1;
-                }
-                cell += N_COLS;
-                if(cell < allcells && field[cell] != COVERED_MINE_CELL){
-                    field[cell] += 1;
-                }
+        }
+        cell = j + N_COLS - 1;
+        if(cell < allCells && (field[cell] > MINE_CELL)){
+            field[cell] -= COVER_FOR_CELL;
+            if(field[cell] == EMPTY_CELL){
+                find_empty_cells(cell);
             }
         }
     }
