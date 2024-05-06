@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 public class UI extends JPanel{
     private final int NUM_IMAGES = 13; // 13 images for game
-    private final int CELL_SIZE = 60; //Size of cell
+    private final int CELL_SIZE = 15; //Size of cell
 
     //
     private final int COVER_FOR_CELL = 10;
