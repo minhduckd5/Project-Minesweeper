@@ -51,7 +51,7 @@ private void initBoard(){
     setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
     img = new Image[NUM_IMAGES];
     for (int i = 0; i < NUM_IMAGES; i++) {
-        var path = "src/resources/" + i + ".png";
+        var path = "D:/OneDrive - VietNam National University - HCM INTERNATIONAL UNIVERSITY/sem 4/DSA/project/Project-Minesweeper-CSharp/resources/" + i + ".png";
         img[i] = (new ImageIcon(path)).getImage();
     }
     addMouseListener(new MinesAdapter());
