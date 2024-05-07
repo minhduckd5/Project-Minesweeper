@@ -11,7 +11,7 @@ public class Minesweeper extends JFrame {
     	status = new JLabel("");
         add(status, BorderLayout.SOUTH);
         add(new UI(status));
-        setResizable(false);
+        setResizable(true);
         pack();
         setTitle("Minesweeper");
         setLocationRelativeTo(null);

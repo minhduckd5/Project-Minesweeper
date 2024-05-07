@@ -46,6 +46,7 @@ public class UI extends JPanel{
     public UI(JLabel status) {
         this.status = status;
         initBoard();
+        
     }
 private void initBoard(){
     setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
