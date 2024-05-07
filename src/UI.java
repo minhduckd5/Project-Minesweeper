@@ -51,7 +51,7 @@ private void initBoard(){
     setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
     img = new Image[NUM_IMAGES];
     for (int i = 0; i < NUM_IMAGES; i++) {
-        var path = "D:/OneDrive - VietNam National University - HCM INTERNATIONAL UNIVERSITY/sem 4/DSA/project/Project-Minesweeper-CSharp/resources/" + i + ".png";
+        String path = "resources/" + i + ".png";
         img[i] = (new ImageIcon(path)).getImage();
     }
     addMouseListener(new MinesAdapter());
@@ -73,7 +73,6 @@ private void newGame(){
     status.setText(Integer.toString(minesLeft));
 
     int i = 0;
-
     while (i < N_MINES) {
 
             int position = (int) (allCells * random.nextDouble());
