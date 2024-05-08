@@ -4,8 +4,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -48,28 +50,73 @@ public class UI extends JPanel{
         initBoard();
         
     }
-private void initBoard(){
-    setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
-    img = new Image[NUM_IMAGES];
-    for (int i = 0; i < NUM_IMAGES; i++) {
-        String path = "resources/" + i + ".png";
-        img[i] = (new ImageIcon(path)).getImage();
-    }
-    addMouseListener(new MinesAdapter());
-    newGame();
+
+// private void initBoard(){
+//     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+//     this.setLayout(layout);
+    
+//     setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT)); //Set size of board
+//     img = new Image[NUM_IMAGES];                                //Create array of images
+//     for (int i = 0; i < NUM_IMAGES; i++) {
+//         String path = "resources/" + i + ".png";                //Path to images
+//         ImageIcon icon = new ImageIcon(path);  
+//         img[i] = new ImageIcon(icon.getImage().getScaledInstance(BOARD_WIDTH, BOARD_HEIGHT, Image.SCALE_DEFAULT)).getImage();
+//         // img[i] = (new ImageIcon(path)).getImage();              //Load images
+//     }
+
+    public void initBoard() {
+        setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT)); //Set size of board
+        img = new Image[NUM_IMAGES];                                //Create array of images
+        for (int i = 0; i < NUM_IMAGES; i++) {
+            String path = "resources/" + i + ".png";                //Path to images
+            try {
+                img[i] = ImageIO.read(new File(path));              //Load images
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        int width = getWidth() / NUM_IMAGES;
+        int height = getHeight();
+
+        // Draw each image, resized to the new width and height
+        for (int i = 0; i < NUM_IMAGES; i++) {
+            img[i].getScaledInstance(width, height, Image.SCALE_DEFAULT), i * width, 0, this;
+        }
+
+    // layout.setHorizontalGroup(
+    //     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+    //     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+    //         .addGap(52, 52, 52)
+    //         .addComponent(img[i], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    //         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+    //         .addComponent(img[i], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    //         .addGap(67, 67, 67))
+    // );
+
+    // layout.setVerticalGroup(
+    //     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+    //     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+    //         .addGap(207, 207, 207)
+    //         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+    //             .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    //             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    //         .addGap(70, 70, 70))
+    // );
+    addMouseListener(new MinesAdapter());                       //Add mouse listener
+    newGame();                                                  //Start new game
 }
 private void newGame(){
     int cell;
 
     var random = new Random();
-    inGame = true;
-    minesLeft = N_MINES;
+    inGame = true;                                              //Game is running
+    minesLeft = N_MINES;                                        //Number of mines left <= number of mines at start
 
-    allCells = N_ROWS * N_COLS;
-    field = new int[allCells];
+    allCells = N_ROWS * N_COLS;                                 //Number of cells
+    field = new int[allCells];                                  //Create array of cells
 
     for (int i = 0; i < allCells; i++) {
-        field[i] = COVER_FOR_CELL;
+        field[i] = COVER_FOR_CELL;                              //Cover all cells (10.png)
     }
     status.setText(Integer.toString(minesLeft));
 
@@ -234,8 +281,15 @@ private void find_empty_cells(int j){
 }
 @Override
 public void paintComponent(Graphics g){
+    super.paintComponent(g);
     int uncover = 0;
+    int width = getWidth() / NUM_IMAGES;
+    int height = getHeight();
 
+    // Draw each image, resized to the new width and height
+    for (int i = 0; i < NUM_IMAGES; i++) {
+        g.drawImage(img[i].getScaledInstance(width, height, Image.SCALE_DEFAULT), i * width, 0, this);
+    }
     for (int i = 0; i < N_ROWS; i++) {
         for (int j = 0; j < N_COLS; j++) {
             int cell = field[(i * N_COLS) + j];
