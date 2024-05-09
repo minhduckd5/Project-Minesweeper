@@ -2,6 +2,8 @@ package src;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -13,7 +15,7 @@ import javax.swing.JPanel;
 
 public class UI extends JPanel{
     private final int NUM_IMAGES = 13; // 13 images for game
-    private final int CELL_SIZE = 15; //Size of cell
+    private int CELL_SIZE = 15; //Size of cell
 
     //
     private final int COVER_FOR_CELL = 10;
@@ -34,8 +36,8 @@ public class UI extends JPanel{
     private int N_ROWS = 16;//Number of rows
     private int N_COLS = 16;//Number of columns
 
-    private final int BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
-    private final int BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
+    private int BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
+    private int BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
 
     private int[] field;
     private boolean inGame;
@@ -48,62 +50,36 @@ public class UI extends JPanel{
     public UI(JLabel status) {
         this.status = status;
         initBoard();
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // Calculate the new cell size based on the new width and height
+                CELL_SIZE = Math.min(getWidth() / N_COLS, getHeight() / N_ROWS);
+                // Recalculate the board width and height
+                BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
+                BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
+                // Redraw the board
+                repaint();
+            }
+        });
         
     }
 
-// private void initBoard(){
-//     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-//     this.setLayout(layout);
-    
-//     setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT)); //Set size of board
-//     img = new Image[NUM_IMAGES];                                //Create array of images
-//     for (int i = 0; i < NUM_IMAGES; i++) {
-//         String path = "resources/" + i + ".png";                //Path to images
-//         ImageIcon icon = new ImageIcon(path);  
-//         img[i] = new ImageIcon(icon.getImage().getScaledInstance(BOARD_WIDTH, BOARD_HEIGHT, Image.SCALE_DEFAULT)).getImage();
-//         // img[i] = (new ImageIcon(path)).getImage();              //Load images
-//     }
-
-    public void initBoard() {
-        setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT)); //Set size of board
-        img = new Image[NUM_IMAGES];                                //Create array of images
-        for (int i = 0; i < NUM_IMAGES; i++) {
-            String path = "resources/" + i + ".png";                //Path to images
-            try {
-                img[i] = ImageIO.read(new File(path));              //Load images
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//auto resize initboard()
+public void initBoard() {
+    setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT)); //Set size of board
+    img = new Image[NUM_IMAGES];                                //Create array of images
+    for (int i = 0; i < NUM_IMAGES; i++) {
+        String path = "resources/" + i + ".png";                //Path to images
+        try {
+            img[i] = ImageIO.read(new File(path));              //Load images
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        int width = getWidth() / NUM_IMAGES;
-        int height = getHeight();
+    }
 
-        // Draw each image, resized to the new width and height
-        for (int i = 0; i < NUM_IMAGES; i++) {
-            img[i].getScaledInstance(width, height, Image.SCALE_DEFAULT), i * width, 0, this;
-        }
-
-    // layout.setHorizontalGroup(
-    //     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-    //     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-    //         .addGap(52, 52, 52)
-    //         .addComponent(img[i], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-    //         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-    //         .addComponent(img[i], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-    //         .addGap(67, 67, 67))
-    // );
-
-    // layout.setVerticalGroup(
-    //     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-    //     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-    //         .addGap(207, 207, 207)
-    //         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-    //             .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-    //             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-    //         .addGap(70, 70, 70))
-    // );
-    addMouseListener(new MinesAdapter());                       //Add mouse listener
-    newGame();                                                  //Start new game
+addMouseListener(new MinesAdapter());                       //Add mouse listener
+newGame();                                                  //Start new game
 }
 private void newGame(){
     int cell;
@@ -283,13 +259,6 @@ private void find_empty_cells(int j){
 public void paintComponent(Graphics g){
     super.paintComponent(g);
     int uncover = 0;
-    int width = getWidth() / NUM_IMAGES;
-    int height = getHeight();
-
-    // Draw each image, resized to the new width and height
-    for (int i = 0; i < NUM_IMAGES; i++) {
-        g.drawImage(img[i].getScaledInstance(width, height, Image.SCALE_DEFAULT), i * width, 0, this);
-    }
     for (int i = 0; i < N_ROWS; i++) {
         for (int j = 0; j < N_COLS; j++) {
             int cell = field[(i * N_COLS) + j];
@@ -314,8 +283,10 @@ public void paintComponent(Graphics g){
                     uncover++;
                 }
             }
-            g.drawImage(img[cell], (j * CELL_SIZE), (i * CELL_SIZE), this);
-        }
+             // Scale the image to fit the cell size
+             Image scaledImg = img[cell].getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH);
+             g.drawImage(scaledImg, (j * CELL_SIZE), (i * CELL_SIZE), this);
+         }
     }
     if(uncover == 0 && inGame){
         inGame = false;
