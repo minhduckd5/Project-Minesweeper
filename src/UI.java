@@ -308,8 +308,11 @@ public void paintComponent(Graphics g){
 private class MinesAdapter extends MouseAdapter{
     @Override
     public void mousePressed(MouseEvent e){
-        int x = e.getX();
-        int y = e.getY();
+        // int x = e.getX();
+        // int y = e.getY();
+                // Adjust the mouse click coordinates
+                int x = e.getX() - (getWidth() - N_COLS * CELL_SIZE) / 2;
+                int y = e.getY() - (getHeight() - N_ROWS * CELL_SIZE) / 2;
 
         int cCol = x / CELL_SIZE;
         int cRow = y / CELL_SIZE;
