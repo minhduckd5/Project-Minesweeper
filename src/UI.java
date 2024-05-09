@@ -50,6 +50,7 @@ public class UI extends JPanel{
     public UI(JLabel status) {
         this.status = status;
         initBoard();
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -258,7 +259,13 @@ private void find_empty_cells(int j){
 @Override
 public void paintComponent(Graphics g){
     super.paintComponent(g);
+
+    // Calculate the top left corner (x,y) to start drawing so the board will be centered
+    int boardTopLeftX = (getWidth() - BOARD_WIDTH) / 2;
+    int boardTopLeftY = (getHeight() - BOARD_HEIGHT) / 2;
+
     int uncover = 0;
+
     for (int i = 0; i < N_ROWS; i++) {
         for (int j = 0; j < N_COLS; j++) {
             int cell = field[(i * N_COLS) + j];
@@ -285,7 +292,9 @@ public void paintComponent(Graphics g){
             }
              // Scale the image to fit the cell size
              Image scaledImg = img[cell].getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH);
-             g.drawImage(scaledImg, (j * CELL_SIZE), (i * CELL_SIZE), this);
+            //  g.drawImage(scaledImg, (j * CELL_SIZE), (i * CELL_SIZE), this);
+            // Draw the image at the adjusted coordinates
+            g.drawImage(scaledImg, boardTopLeftX + (j * CELL_SIZE), boardTopLeftY + (i * CELL_SIZE), this);
          }
     }
     if(uncover == 0 && inGame){
