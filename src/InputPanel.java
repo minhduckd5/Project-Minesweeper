@@ -21,9 +21,15 @@ class InputPanel {
         myPanel.add(new JLabel("Mines:"));
         myPanel.add(minesField);
 
-        int result = JOptionPane.showConfirmDialog(null, myPanel, 
-               "Please Enter Width, Height and Number of Mines", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
+        // int result = JOptionPane.showConfirmDialog(null, myPanel, 
+        //        "Please Enter Width, Height and Number of Mines", JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE);;
+        // if (result == JOptionPane.OK_OPTION) {
+            JOptionPane optionPane = new JOptionPane(myPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+            JDialog dialog = optionPane.createDialog("Please Enter Width, Height and Number of Mines");
+            dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+            dialog.setVisible(true);
+    
+            if (JOptionPane.OK_OPTION == ((Integer) optionPane.getValue()).intValue()) {
                     //input to N_ROWS, N_COLS, N_MINES in UI
                     int width = Integer.parseInt(widthField.getText());
                     int height = Integer.parseInt(heightField.getText());
