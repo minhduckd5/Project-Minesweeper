@@ -32,9 +32,9 @@ public class UI extends JPanel{
     private final int DRAW_WRONG_MARK = 12;
 
     //Variables
-    private int N_MINES = 40; //Number of mines
-    private int N_ROWS = 16;//Number of rows
-    private int N_COLS = 16;//Number of columns
+    public static int N_MINES = 40; //Number of mines
+    public static int N_ROWS = 16;//Number of rows
+    public static int N_COLS = 16;//Number of columns
 
     private int BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
     private int BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
@@ -46,6 +46,17 @@ public class UI extends JPanel{
 
     private int allCells;
     private final JLabel status;
+    //getter N_ROWS and N_COLS and N_MINES from InputPanel
+    public int getN_ROWS(){
+        return N_ROWS;
+    }
+    public int getN_COLS(){
+        return N_COLS;
+    }
+    public int getN_MINES(){
+        return N_MINES;
+    }
+
 
     public UI(JLabel status) {
         this.status = status;
