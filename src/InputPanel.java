@@ -103,6 +103,7 @@ public class InputPanel {
                         dialog.setVisible(true);
 
                         if (JOptionPane.OK_OPTION == ((Integer) optionPane.getValue()).intValue()) {
+                            try {
                             width = Integer.parseInt(widthField.getText());
                             height = Integer.parseInt(heightField.getText());
                             mines = Integer.parseInt(minesField.getText());
@@ -111,11 +112,18 @@ public class InputPanel {
                                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
                             } else{
                             validInput = true;
-                            break;
+                            
                             }
+                        } catch (NumberFormatException e) {
+                            JOptionPane.showMessageDialog(null, "Please enter only numbers.",
+                                    "Invalid Input", JOptionPane.ERROR_MESSAGE);
                         }
+                    }else{
+                        difficulty = null;
                         break;
+                        }
                     }
+                    break;
                 }
             }
         UI.N_ROWS = height;
