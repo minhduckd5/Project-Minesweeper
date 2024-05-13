@@ -81,6 +81,8 @@ public class InputPanel {
                         validInput = true;
                         break;
                     default:
+                        validInput = false;
+                        while (!validInput) {
                         JTextField widthField = new JTextField(5);
                         JTextField heightField = new JTextField(5);
                         JTextField minesField = new JTextField(5);
@@ -104,10 +106,17 @@ public class InputPanel {
                             width = Integer.parseInt(widthField.getText());
                             height = Integer.parseInt(heightField.getText());
                             mines = Integer.parseInt(minesField.getText());
+                            if (width < 9 || height < 9 || mines < 10) {
+                                JOptionPane.showMessageDialog(null, "Width and height cannot be smaller than 9 and number of mines cannot be smaller than 10. Please enter again.",
+                                        "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                            } else{
                             validInput = true;
+                            break;
+                            }
                         }
                         break;
                     }
+                }
             }
         UI.N_ROWS = height;
         UI.N_COLS = width;
