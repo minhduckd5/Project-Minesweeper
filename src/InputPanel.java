@@ -58,7 +58,7 @@ public class InputPanel {
 
         while (!validInput) {
             difficulty = (String) JOptionPane.showInputDialog(null, "Choose difficulty level:",
-                    "Difficulty Level", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                    "Difficulty Level", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
             if (difficulty != null) {
                 switch (difficulty) {
