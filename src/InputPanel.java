@@ -53,14 +53,14 @@ public class InputPanel {
 
     public static void getInput() {
         String[] options = {"Beginner", "Intermediate", "Advanced", "Custom"};
-        String difficulty = null;
-        boolean validInput = false;
+        String difficulty = null;                                               //default difficulty level
+        boolean validInput = false;                                             //default valid input
 
-        while (!validInput) {
-            difficulty = (String) JOptionPane.showInputDialog(null, "Choose difficulty level:",
+        while (!validInput) {                                                   //while true
+            difficulty = (String) JOptionPane.showInputDialog(null, "Choose difficulty level:", //option pane
                     "Difficulty Level", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
-            if (difficulty != null) {
+            if (difficulty != null) {                                           //difficulty is choosen
                 switch (difficulty) {
                     case "Beginner":
                         width = 9;
@@ -80,27 +80,27 @@ public class InputPanel {
                         mines = 99;
                         validInput = true;
                         break;
-                    default:
-                        validInput = false;
-                        while (!validInput) {
-                        JTextField widthField = new JTextField(5);
+                    default:                                                    //không thỏa mãn hết case
+                        validInput = false;                                     //set false tiếp
+                        while (!validInput) {                                   //while true
+                        JTextField widthField = new JTextField(5);      //textfield để điền input
                         JTextField heightField = new JTextField(5);
                         JTextField minesField = new JTextField(5);
 
                         JPanel myPanel = new JPanel();
                         myPanel.add(new JLabel("Width:"));
                         myPanel.add(widthField);
-                        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+                        myPanel.add(Box.createHorizontalStrut(15)); // khoảng trống
                         myPanel.add(new JLabel("Height:"));
                         myPanel.add(heightField);
-                        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+                        myPanel.add(Box.createHorizontalStrut(15)); // khoảng trống
                         myPanel.add(new JLabel("Mines:"));
                         myPanel.add(minesField);
 
-                        JOptionPane optionPane = new JOptionPane(myPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-                        JDialog dialog = optionPane.createDialog("Please Enter Width, Height and Number of Mines");
-                        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-                        dialog.setVisible(true);
+                        JOptionPane optionPane = new JOptionPane(myPanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION); //Plain message xóa question icon
+                        JDialog dialog = optionPane.createDialog("Please Enter Width, Height and Number of Mines");           //tạo dialog
+                        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);                                               //set nút close không làm gì
+                        dialog.setVisible(true);                                                                                  //hiện dialog
 
                         if (JOptionPane.OK_OPTION == ((Integer) optionPane.getValue()).intValue()) {
                             try {
