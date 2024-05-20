@@ -107,7 +107,7 @@ public class InputPanel {
                             width = Integer.parseInt(widthField.getText());
                             height = Integer.parseInt(heightField.getText());
                             mines = Integer.parseInt(minesField.getText());
-                            if (width < 9 || height < 9 || mines < 10) {
+                            if (width < 9 || height < 9 || mines < 10 || width > 30 || height > 24 || mines > 668) {
                                 JOptionPane.showMessageDialog(null, "Width and height cannot be smaller than 9 and number of mines cannot be smaller than 10. Please enter again.",
                                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
                             } else{

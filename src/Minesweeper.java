@@ -12,6 +12,11 @@ public class Minesweeper extends JFrame {
         InputPanel inputPanel = new InputPanel();
         inputPanel.getInput();
 
+        // Create the menu bar
+        MenuBar menuBar = new MenuBar();
+        // Add the menu bar to the frame
+        setJMenuBar(menuBar);
+
         add(status, BorderLayout.SOUTH);
         add(new UI(status));
         setResizable(true);
