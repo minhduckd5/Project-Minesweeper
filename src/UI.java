@@ -93,7 +93,7 @@ public void initBoard() {
 addMouseListener(new MinesAdapter());                       //Add mouse listener
 newGame();                                                  //Start new game
 }
-private void newGame(){
+public void newGame(){
     int cell;
 
     var random = new Random();
