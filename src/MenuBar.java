@@ -11,9 +11,15 @@ public class MenuBar extends JMenuBar {
 
 
         JMenu gameMenu = new JMenu("Game");
+        
         JMenuItem newGameItem = new JMenuItem("New Game");
         newGameItem.addActionListener(e -> newGame());
         gameMenu.add(newGameItem);
+
+        JMenuItem optionsItem = new JMenuItem("Options");
+        optionsItem.addActionListener(e -> showOptions());
+        gameMenu.add(optionsItem);
+
         this.add(gameMenu);
     }
 
@@ -25,5 +31,10 @@ public class MenuBar extends JMenuBar {
             minesweeper.startNewGame(); // Start a new game
                 
         }
+    }
+
+    private void showOptions() {
+        InputPanel.getInput();
+        minesweeper.startNewGame();
     }
 }
