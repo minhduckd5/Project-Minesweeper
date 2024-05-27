@@ -46,6 +46,8 @@ public class UI extends JPanel{
 
     private int allCells;
     private final JLabel status;
+    private boolean firstclick; //flag for first click
+
     //getter N_ROWS and N_COLS and N_MINES from InputPanel
     public int getN_ROWS(){
         return N_ROWS;
@@ -94,10 +96,9 @@ addMouseListener(new MinesAdapter());                       //Add mouse listener
 newGame();                                                  //Start new game
 }
 public void newGame(){
-    int cell;
 
-    var random = new Random();
-    inGame = true;                                              //Game is running
+    inGame = true;         
+    firstclick = true;                                     //Game is running
     minesLeft = N_MINES;                                        //Number of mines left <= number of mines at start
 
     allCells = N_ROWS * N_COLS;                                 //Number of cells
@@ -107,13 +108,16 @@ public void newGame(){
         field[i] = COVER_FOR_CELL;                              //Cover all cells (10.png)
     }
     status.setText(Integer.toString(minesLeft));
-
-    int i = 0;
+}
+    private void placeMines(int emptyCell){
+        var random = new Random();
+        int cell;
+        int i = 0;
     while (i < N_MINES) {
 
             int position = (int) (allCells * random.nextDouble());
 
-            if ((position < allCells)
+            if ((position < allCells)||(position != emptyCell)
                     && (field[position] != COVERED_MINE_CELL)) {
 
                 int current_col = position % N_COLS;
@@ -179,6 +183,7 @@ public void newGame(){
             }
         }
     }
+
 private void find_empty_cells(int j){
     int current_col = j % N_COLS;
     int cell;
@@ -333,6 +338,10 @@ private class MinesAdapter extends MouseAdapter{
         if(!inGame){
             newGame();
             repaint();
+        }
+        if(firstclick){
+            placeMines((cRow * N_COLS)+cCol);
+            firstclick = false;
         }
         if((x < N_COLS * CELL_SIZE) && (y < N_ROWS * CELL_SIZE)){
             if(e.getButton() == MouseEvent.BUTTON3){
