@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class UI extends JPanel{
     private final int NUM_IMAGES = 13; // 13 images for game
@@ -287,6 +289,7 @@ public void paintComponent(Graphics g){
             int cell = field[(i * N_COLS) + j];
             if(inGame && cell == MINE_CELL){
                 inGame = false;
+                showGameOverDialog(false); // Game lost
             }
             if(!inGame){
                 if(cell == COVERED_MINE_CELL){
@@ -313,13 +316,24 @@ public void paintComponent(Graphics g){
             g.drawImage(scaledImg, boardTopLeftX + (j * CELL_SIZE), boardTopLeftY + (i * CELL_SIZE), this);
          }
     }
-    if(uncover == 0 && inGame){
+    if (uncover == 0 && inGame) {
         inGame = false;
         status.setText("Game won");
-    }else if(!inGame){
+        showGameOverDialog(true); // Game won
+    } else if (!inGame) {
         status.setText("Game lost");
+        showGameOverDialog(false); // Game lost
     }
+}
+private void showGameOverDialog(boolean won) {
+    String message = won ? "Congratulations! You won! Do you want to play again?" : "You lost! Do you want to play again?";
+    int option = JOptionPane.showConfirmDialog(this, message, "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 
+    if (option == JOptionPane.YES_OPTION) {
+        ((Minesweeper) SwingUtilities.getWindowAncestor(this)).startNewGame();
+    } else {
+        ((Minesweeper) SwingUtilities.getWindowAncestor(this)).dispose();
+    }
 }
 private class MinesAdapter extends MouseAdapter{
     @Override

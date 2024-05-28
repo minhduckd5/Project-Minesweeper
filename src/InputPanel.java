@@ -9,7 +9,7 @@ public class InputPanel {
 
     public static void getInput() {
         String[] options = {"Beginner", "Intermediate", "Advanced", "Custom"};
-        String difficulty = null;                                               //default difficulty level
+        String difficulty;                                               //default difficulty level
         boolean validInput = false;                                             //default valid input
 
         while (!validInput) {                                                   //while true
