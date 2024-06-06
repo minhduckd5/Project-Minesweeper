@@ -98,6 +98,7 @@ addMouseListener(new MinesAdapter());                       //Add mouse listener
 newGame();                                                  //Start new game
 }
 public void newGame(){
+    SoundPlayer.playSound("start.wav");
 
     inGame = true;         
     firstclick = true;                                     //Game is running
@@ -318,9 +319,11 @@ public void paintComponent(Graphics g){
     }
     if (uncover == 0 && inGame) {
         inGame = false;
+        SoundPlayer.playSound("win.wav");
         status.setText("Game won");
         showGameOverDialog(true); // Game won
     } else if (!inGame) {
+        SoundPlayer.playSound("lose_minesweeper.wav");
         status.setText("Game lost");
         showGameOverDialog(false); // Game lost
     }
@@ -377,6 +380,7 @@ private class MinesAdapter extends MouseAdapter{
                     }
                 }
             }else{
+                SoundPlayer.playSound("click.wav");
                 if(field[(cRow * N_COLS) + cCol] > COVERED_MINE_CELL){
                     return;
                 }
