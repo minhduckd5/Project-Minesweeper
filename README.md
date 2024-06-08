@@ -1,2 +1,2 @@
-# Project Minesweeper CSharp
+# Project Minesweeper
  
