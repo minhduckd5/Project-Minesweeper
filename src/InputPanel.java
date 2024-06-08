@@ -6,10 +6,10 @@ public class InputPanel {
     private static int width;
     private static int height;
     private static int mines;
+    private static String difficulty;
 
     public static void getInput() {
         String[] options = {"Beginner", "Intermediate", "Advanced", "Custom"};
-        String difficulty;                                               //default difficulty level
         boolean validInput = false;                                             //default valid input
 
         while (!validInput) {                                                   //while true
@@ -86,5 +86,9 @@ public class InputPanel {
         UI.N_COLS = width;
         UI.N_MINES = mines;
         }
+        
+    }
+    public static String getSelectedDifficulty() {
+        return difficulty;
     }
 }

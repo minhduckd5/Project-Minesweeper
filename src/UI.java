@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import java.awt.BorderLayout;
 
 public class UI extends JPanel{
     private final int NUM_IMAGES = 13; // 13 images for game
@@ -49,6 +50,7 @@ public class UI extends JPanel{
     private int allCells;
     private final JLabel status;
     private boolean firstclick; //flag for first click
+    private GameEndListener gameEndListener;
 
     //getter N_ROWS and N_COLS and N_MINES from InputPanel
     public int getN_ROWS(){
@@ -62,8 +64,9 @@ public class UI extends JPanel{
     }
 
 
-    public UI(JLabel status) {
+    public UI(GameEndListener gameEndListener,JLabel status) {
         this.status = status;
+        this.gameEndListener = gameEndListener;
         initBoard();
 
         addComponentListener(new ComponentAdapter() {
@@ -329,6 +332,7 @@ public void paintComponent(Graphics g){
     }
 }
 private void showGameOverDialog(boolean won) {
+    gameEndListener.endGame(won); // Notify the game end listener
     String message = won ? "Congratulations! You won! Do you want to play again?" : "You lost! Do you want to play again?";
     int option = JOptionPane.showConfirmDialog(this, message, "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 
