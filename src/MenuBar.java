@@ -1,6 +1,8 @@
 package src;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MenuBar extends JMenuBar {
 
@@ -19,6 +21,15 @@ public class MenuBar extends JMenuBar {
         JMenuItem optionsItem = new JMenuItem("Options");
         optionsItem.addActionListener(e -> showOptions());
         gameMenu.add(optionsItem);
+
+        JMenuItem statisticsMenuItem = new JMenuItem("Statistics");
+        statisticsMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new StatisticsPanel();
+            }
+        });
+        gameMenu.add(statisticsMenuItem);
 
         this.add(gameMenu);
     }
