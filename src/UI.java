@@ -120,10 +120,9 @@ public void newGame(){
         int i = 0;
     while (i < N_MINES) {
 
-            int position = (int) (allCells * random.nextDouble());
+        int position = random.nextInt(allCells);
 
-            if ((position < allCells)||(position != emptyCell)
-                    && (field[position] != COVERED_MINE_CELL)) {
+            if (position != emptyCell && field[position] != COVERED_MINE_CELL) {
 
                 int current_col = position % N_COLS;
                 field[position] = COVERED_MINE_CELL;
@@ -344,11 +343,9 @@ private void showGameOverDialog(boolean won) {
 private class MinesAdapter extends MouseAdapter{
     @Override
     public void mousePressed(MouseEvent e){
-        // int x = e.getX();
-        // int y = e.getY();
-                // Adjust the mouse click coordinates
-                int x = e.getX() - (getWidth() - N_COLS * CELL_SIZE) / 2;
-                int y = e.getY() - (getHeight() - N_ROWS * CELL_SIZE) / 2;
+        // Adjust the mouse click coordinates
+        int x = e.getX() - (getWidth() - N_COLS * CELL_SIZE) / 2;
+        int y = e.getY() - (getHeight() - N_ROWS * CELL_SIZE) / 2;
 
         int cCol = x / CELL_SIZE;
         int cRow = y / CELL_SIZE;
