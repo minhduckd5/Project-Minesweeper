@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
 
 public class UI extends JPanel{
     private final int NUM_IMAGES = 13; // 13 images for game
@@ -331,7 +333,9 @@ public void paintComponent(Graphics g){
 }
 private void showGameOverDialog(boolean won) {
     gameEndListener.endGame(won); // Notify the game end listener
+    
     String message = won ? "Congratulations! You won! Do you want to play again?" : "You lost! Do you want to play again?";
+    Timer timer = new Timer(2000, e -> {
     int option = JOptionPane.showConfirmDialog(this, message, "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 
     if (option == JOptionPane.YES_OPTION) {
@@ -339,6 +343,9 @@ private void showGameOverDialog(boolean won) {
     } else {
         ((Minesweeper) SwingUtilities.getWindowAncestor(this)).dispose();
     }
+});
+        timer.setRepeats(false); // Ensure the timer only runs once
+        timer.start();
 }
 private class MinesAdapter extends MouseAdapter{
     @Override
