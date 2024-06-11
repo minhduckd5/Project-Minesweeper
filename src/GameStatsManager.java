@@ -23,7 +23,7 @@ public class GameStatsManager {
             case "Advanced":
                 return advancedStats;
             default:
-                throw new IllegalArgumentException("Unknown difficulty: " + difficulty);
+                return null; // Return null for custom or unknown difficulties
         }
     }
 

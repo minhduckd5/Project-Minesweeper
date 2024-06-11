@@ -13,8 +13,8 @@ public class Minesweeper extends JFrame implements GameEndListener {
     public Minesweeper() {
 
     	status = new JLabel("");
-        InputPanel inputPanel = new InputPanel();
-        inputPanel.getInput();
+        
+        InputPanel.getInput();
 
         // Create the menu bar
         MenuBar menuBar = new MenuBar(this); //pass 'this' to menbar
@@ -33,7 +33,7 @@ public class Minesweeper extends JFrame implements GameEndListener {
 
         statsManager = new GameStatsManager();
         //get difficulty from input panel
-        currentDifficulty = inputPanel.getSelectedDifficulty();
+        currentDifficulty = InputPanel.getSelectedDifficulty();
 
 
         setLocationRelativeTo(null);
@@ -46,7 +46,11 @@ public class Minesweeper extends JFrame implements GameEndListener {
 
     @Override
     public void endGame(boolean won) {
-        statsManager.getStats(currentDifficulty).recordGame(won);
+        GameStats stats = statsManager.getStats(currentDifficulty); 
+        if (stats != null) {                                            //make sure gamestat not null
+            stats.recordGame(won);
+        }
+        // statsManager.getStats(currentDifficulty).recordGame(won);
         
     }
 

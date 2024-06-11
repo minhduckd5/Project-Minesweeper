@@ -32,6 +32,13 @@ public class MenuBar extends JMenuBar {
         gameMenu.add(statisticsMenuItem);
 
         this.add(gameMenu);
+
+         // Add Help menu with Tutorial item
+         JMenu helpMenu = new JMenu("Help");
+         JMenuItem tutorialItem = new JMenuItem("Tutorial");
+         tutorialItem.addActionListener(e -> showTutorial());
+         helpMenu.add(tutorialItem);
+         this.add(helpMenu);
     }
 
     private void newGame() {
@@ -47,5 +54,9 @@ public class MenuBar extends JMenuBar {
     private void showOptions() {
         InputPanel.getInput();
         minesweeper.startNewGame();
+    }
+
+    private void showTutorial() {
+        new TutorialFrame();
     }
 }
