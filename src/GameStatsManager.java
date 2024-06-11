@@ -33,4 +33,11 @@ public class GameStatsManager {
         intermediateStats.saveToFile();
         advancedStats.saveToFile();
     }
+
+    public void resetAllStats() {
+        beginnerStats.reset();
+        intermediateStats.reset();
+        advancedStats.reset();
+        saveAllStats();
+    }
 }

@@ -26,7 +26,7 @@ public class MenuBar extends JMenuBar {
         statisticsMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new StatisticsPanel();
+                new StatisticsPanel(minesweeper);
             }
         });
         gameMenu.add(statisticsMenuItem);

@@ -13,8 +13,11 @@ public class StatisticsPanel extends JFrame {
     private JRadioButton mediumButton;
     private JRadioButton hardButton;
     private JTextArea statsTextArea;
+    private Minesweeper minesweeper;
 
-    public StatisticsPanel() {
+    public StatisticsPanel(Minesweeper minesweeper) {
+        this.minesweeper = minesweeper;
+        
         setTitle("Statistics");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -41,6 +44,9 @@ public class StatisticsPanel extends JFrame {
         statsTextArea = new JTextArea();
         add(new JScrollPane(statsTextArea), BorderLayout.CENTER);
 
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+
         JButton showStatsButton = new JButton("Show Statistics");
         showStatsButton.addActionListener(new ActionListener() {
             @Override
@@ -48,7 +54,18 @@ public class StatisticsPanel extends JFrame {
                 showStatistics();
             }
         });
-        add(showStatsButton, BorderLayout.SOUTH);
+        add(showStatsButton, BorderLayout.EAST);
+
+        JButton resetStatsButton = new JButton("Reset Statistics");
+        resetStatsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetStatistics();
+            }
+        });
+        buttonPanel.add(resetStatsButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -86,4 +103,16 @@ public class StatisticsPanel extends JFrame {
             statsTextArea.setText("Failed to load statistics for " + difficulty);
         }
     }   
+
+    private void resetStatistics() {
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to reset all statistics?", 
+                "Reset Statistics", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            GameStatsManager statsManager = minesweeper.getStatsManager();
+            statsManager.resetAllStats();
+            statsTextArea.setText("Statistics have been reset.");
+        }
+    }
 }

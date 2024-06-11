@@ -47,12 +47,8 @@ public class Minesweeper extends JFrame implements GameEndListener {
     @Override
     public void endGame(boolean won) {
         statsManager.getStats(currentDifficulty).recordGame(won);
-        // statsManager.saveAllStats("game_stats");
+        
     }
-
-    // public void setCurrentDifficulty(String difficulty) {
-    //     currentDifficulty = difficulty;
-    // }
 
     public GameStatsManager getStatsManager() {
         return statsManager;

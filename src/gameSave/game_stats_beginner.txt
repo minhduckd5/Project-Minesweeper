@@ -1,6 +1,6 @@
-Games Played: 3
+Games Played: 0
 Games Won: 0
 Win Percentage: 0.0
 Longest Winning Streak: 0
-Longest Losing Streak: 2
-Current Streak: -3
+Longest Losing Streak: 0
+Current Streak: 0

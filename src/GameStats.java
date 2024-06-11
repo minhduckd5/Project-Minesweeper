@@ -121,4 +121,13 @@ public class GameStats {
             }
         }
     }
+
+    public void reset() {
+        gamesPlayed = 0;
+        gamesWon = 0;
+        longestWinningStreak = 0;
+        longestLosingStreak = 0;
+        currentStreak = 0;
+        currentStreakLength = 0;
+    }
 }
