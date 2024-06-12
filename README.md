@@ -3,9 +3,9 @@ JAVA MINESWEEPER
 
 ![menu art](resources/minesweepericon.png)
 
-    + Escape: describes as an explosive.
+    + Mine: describes as an explosive.
     
-    + Enigma: describes a person that finds and cleans a field of mines
+    + Sweeper: describes a person that finds and cleans a field of mines
 
 # Description
 Welcome to Minesweeper! You can test your mind how good you are at strategy with this classic logic-based puzzle game. A field of squares will be shown to you at the start, and some of them will hide dangerous mines beneath. Your job is to clear the field without triggering any bombs. When you click on a square, you can see what's underneath: a number that tells you how many mines are next to it, an empty spot, or a mine itself. Use the numbers as clues to mark all suspicious mines and safely dig up all the squares that aren't mined (using flags). Exciting reasoning and strategy games to play as you try to clear the board without getting boom boom shakalaka. Have fun and good luck!
