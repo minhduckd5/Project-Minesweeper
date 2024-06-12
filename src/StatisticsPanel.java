@@ -14,6 +14,7 @@ public class StatisticsPanel extends JFrame {
     private JRadioButton hardButton;
     private JTextArea statsTextArea;
     private Minesweeper minesweeper;
+    private String currentDifficulty; // Store the currently selected difficulty
 
     public StatisticsPanel(Minesweeper minesweeper) {
         this.minesweeper = minesweeper;
@@ -47,14 +48,14 @@ public class StatisticsPanel extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
 
-        JButton showStatsButton = new JButton("Show Statistics");
-        showStatsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showStatistics();
-            }
-        });
-        add(showStatsButton, BorderLayout.EAST);
+        // JButton showStatsButton = new JButton("Show Statistics");
+        // showStatsButton.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         showStatistics();
+        //     }
+        // });
+        // add(showStatsButton, BorderLayout.EAST);
 
         JButton resetStatsButton = new JButton("Reset Statistics");
         resetStatsButton.addActionListener(new ActionListener() {
@@ -67,42 +68,73 @@ public class StatisticsPanel extends JFrame {
 
         add(buttonPanel, BorderLayout.SOUTH);
 
+        //  // Add action listeners to radio buttons to show statistics when selected
+        //  easyButton.addActionListener(e -> showStatistics("Beginner", "game_stats_beginner"));
+        //  mediumButton.addActionListener(e -> showStatistics("Intermediate", "game_stats_intermediate"));
+        //  hardButton.addActionListener(e -> showStatistics("Advanced", "game_stats_advanced"));
+        // Add action listeners to radio buttons to show statistics when selected
+        easyButton.addActionListener(e -> {
+            currentDifficulty = "Beginner";
+            showStatistics(currentDifficulty, "game_stats_beginner");
+        });
+        mediumButton.addActionListener(e -> {
+            currentDifficulty = "Intermediate";
+            showStatistics(currentDifficulty, "game_stats_intermediate");
+        });
+        hardButton.addActionListener(e -> {
+            currentDifficulty = "Advanced";
+            showStatistics(currentDifficulty, "game_stats_advanced");
+        });
+
         setVisible(true);
     }
 
-    private void showStatistics() {
-        String difficulty = "";
-        String path = "";
+    // private void showStatistics() {
+    //     String difficulty = "";
+    //     String path = "";
     
-        if (easyButton.isSelected()) {
-            difficulty = "Beginner";
-            path = "game_stats_beginner";
-        } else if (mediumButton.isSelected()) {
-            difficulty = "Intermediate";
-            path = "game_stats_intermediate";
-        } else if (hardButton.isSelected()) {
-            difficulty = "Advanced";
-            path = "game_stats_advanced";
-        }
+    //     if (easyButton.isSelected()) {
+    //         difficulty = "Beginner";
+    //         path = "game_stats_beginner";
+    //     } else if (mediumButton.isSelected()) {
+    //         difficulty = "Intermediate";
+    //         path = "game_stats_intermediate";
+    //     } else if (hardButton.isSelected()) {
+    //         difficulty = "Advanced";
+    //         path = "game_stats_advanced";
+    //     }
     
-        if (!difficulty.isEmpty()) {
-            loadStatistics(difficulty, path);
-        }
-    }
-    private void loadStatistics(String difficulty, String path) {
+    //     if (!difficulty.isEmpty()) {
+    //         loadStatistics(difficulty, path);
+    //     }
+    // }
+   
+    // private void loadStatistics(String difficulty, String path) {
+    //     try (FileReader reader = new FileReader("src/gameSave/" + path + ".txt")) {
+    //         // Read the file and display the statistics based on difficulty
+    //         // This is a placeholder, the actual implementation may vary
+    //         char[] buffer = new char[1024];
+    //         int numCharsRead = reader.read(buffer);
+    //         String fileContent = new String(buffer, 0, numCharsRead);
+    //         // Parse the fileContent based on the difficulty
+    //         // For now, we just display the content
+    //         statsTextArea.setText("Difficulty: " + difficulty + "\n" + fileContent);
+    //     } catch (IOException e) {
+    //         statsTextArea.setText("Failed to load statistics for " + difficulty);
+    //     }
+    // }   
+
+    private void showStatistics(String difficulty, String path) {
         try (FileReader reader = new FileReader("src/gameSave/" + path + ".txt")) {
             // Read the file and display the statistics based on difficulty
-            // This is a placeholder, the actual implementation may vary
             char[] buffer = new char[1024];
             int numCharsRead = reader.read(buffer);
             String fileContent = new String(buffer, 0, numCharsRead);
-            // Parse the fileContent based on the difficulty
-            // For now, we just display the content
             statsTextArea.setText("Difficulty: " + difficulty + "\n" + fileContent);
         } catch (IOException e) {
             statsTextArea.setText("Failed to load statistics for " + difficulty);
         }
-    }   
+    }
 
     private void resetStatistics() {
         int confirm = JOptionPane.showConfirmDialog(this, 
@@ -112,7 +144,30 @@ public class StatisticsPanel extends JFrame {
         if (confirm == JOptionPane.YES_OPTION) {
             GameStatsManager statsManager = minesweeper.getStatsManager();
             statsManager.resetAllStats();
+            
             statsTextArea.setText("Statistics have been reset.");
+
+        // Wait for 2 seconds and then show the statistics again for the current difficulty
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (currentDifficulty != null) {
+                    switch (currentDifficulty) {
+                        case "Beginner":
+                            showStatistics("Beginner", "game_stats_beginner");
+                            break;
+                        case "Intermediate":
+                            showStatistics("Intermediate", "game_stats_intermediate");
+                            break;
+                        case "Advanced":
+                            showStatistics("Advanced", "game_stats_advanced");
+                            break;
+                    }
+                }
+            }
+        });
+        timer.setRepeats(false); // Ensure the timer only runs once
+        timer.start();
         }
     }
 }
