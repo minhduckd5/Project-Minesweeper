@@ -35,7 +35,7 @@ MSC. Thai Trung Tin - tttin@hcmiu.edu.vn
 
     Nguyễn Huỳnh Minh Đức              ITCSIU22218        https://github.com/minhduckd5
 
-# Credits:
+# References:
 1. Kenny Yip Coding: Code Minesweeper in Java - https://youtu.be/5VrMVSDjeso?si=7DunNwlQYjqljBsp
 2. CodingWithTim: Java Tutorials - https://www.youtube.com/watch?v=YYcP-Y882LI&list=PLfVlxZooqrPteAbVSQ93Ss9DrUxjmpNX5&pp=iAQB
 3. gaspar coding: Programming Minesweeper Game in Java, Tutorial - https://youtu.be/r_u_C1VEKFA?si=ADI84zmgPIm9agNz
