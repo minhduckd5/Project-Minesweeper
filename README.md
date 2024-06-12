@@ -1,7 +1,7 @@
 # Project Name
-Escigma
+JAVA MINESWEEPER
 
-![menu art]()
+![menu art](resources/minesweepericon.png)
 
     + Escape: describes as an explosive.
     
