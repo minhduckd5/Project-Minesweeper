@@ -8,6 +8,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
@@ -189,95 +191,127 @@ public void newGame(){
             }
         }
     }
+    private void find_empty_cells(int j) {
+    Queue<Integer> queue = new LinkedList<>();
+    queue.add(j);
 
-private void find_empty_cells(int j){
-    int current_col = j % N_COLS;
-    int cell;
+    while (!queue.isEmpty()) {
+        int cellPos = queue.poll();
+        int current_col = cellPos % N_COLS;
+        int cell;
 
-    if (current_col > 0) {
-        cell = j - N_COLS - 1;
-        if (cell >= 0) {
-            if (field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) {
-                    find_empty_cells(cell);
+        // Check all 8 directions
+        int[] directions = {-N_COLS - 1, -N_COLS, -N_COLS + 1, -1, 1, N_COLS - 1, N_COLS, N_COLS + 1};
+
+        for (int dir : directions) {
+            cell = cellPos + dir;
+
+            // Ensure cell is within bounds
+            if (cell >= 0 && cell < allCells) {
+                // Handle edge cases where cells are on different rows but considered adjacent
+                if ((dir == -N_COLS - 1 || dir == -1 || dir == N_COLS - 1) && current_col == 0) continue;
+                if ((dir == -N_COLS + 1 || dir == 1 || dir == N_COLS + 1) && current_col == (N_COLS - 1)) continue;
+
+                if (field[cell] > MINE_CELL) {
+                    field[cell] -= COVER_FOR_CELL;
+                    if (field[cell] == EMPTY_CELL) {
+                        queue.add(cell);
+                    }
                 }
-            }
-        }
-
-        cell = j - 1;
-        if (cell >= 0) {
-            if (field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) {
-                    find_empty_cells(cell);
-                }
-            }
-        }
-
-        cell = j + N_COLS - 1;
-        if (cell < allCells) {
-            if (field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) {
-                    find_empty_cells(cell);
-                }
-            }
-        }
-    }
-
-    cell = j - N_COLS;
-    if (cell >= 0) {
-        if (field[cell] > MINE_CELL) {
-            field[cell] -= COVER_FOR_CELL;
-            if (field[cell] == EMPTY_CELL) {
-                find_empty_cells(cell);
-            }
-        }
-    }
-
-    cell = j + N_COLS;
-    if (cell < allCells) {
-        if (field[cell] > MINE_CELL) {
-            field[cell] -= COVER_FOR_CELL;
-            if (field[cell] == EMPTY_CELL) {
-                find_empty_cells(cell);
-            }
-        }
-    }
-
-    if (current_col < (N_COLS - 1)) {
-        cell = j - N_COLS + 1;
-        if (cell >= 0) {
-            if (field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) {
-                    find_empty_cells(cell);
-                }
-            }
-        }
-
-        cell = j + N_COLS + 1;
-        if (cell < allCells) {
-            if (field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) {
-                    find_empty_cells(cell);
-                }
-            }
-        }
-
-        cell = j + 1;
-        if (cell < allCells) {
-            if (field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) {
-                    find_empty_cells(cell);
-                }   
             }
         }
     }
 }
+
+
+// private void find_empty_cells(int j){
+//     int current_col = j % N_COLS;
+//     int cell;
+
+//     if (current_col > 0) {
+//         cell = j - N_COLS - 1;
+//         if (cell >= 0) {
+//             if (field[cell] > MINE_CELL) {
+//                 field[cell] -= COVER_FOR_CELL;
+//                 if (field[cell] == EMPTY_CELL) {
+//                     find_empty_cells(cell);
+//                 }
+//             }
+//         }
+
+//         cell = j - 1;
+//         if (cell >= 0) {
+//             if (field[cell] > MINE_CELL) {
+//                 field[cell] -= COVER_FOR_CELL;
+//                 if (field[cell] == EMPTY_CELL) {
+//                     find_empty_cells(cell);
+//                 }
+//             }
+//         }
+
+//         cell = j + N_COLS - 1;
+//         if (cell < allCells) {
+//             if (field[cell] > MINE_CELL) {
+//                 field[cell] -= COVER_FOR_CELL;
+//                 if (field[cell] == EMPTY_CELL) {
+//                     find_empty_cells(cell);
+//                 }
+//             }
+//         }
+//     }
+
+//     cell = j - N_COLS;
+//     if (cell >= 0) {
+//         if (field[cell] > MINE_CELL) {
+//             field[cell] -= COVER_FOR_CELL;
+//             if (field[cell] == EMPTY_CELL) {
+//                 find_empty_cells(cell);
+//             }
+//         }
+//     }
+
+//     cell = j + N_COLS;
+//     if (cell < allCells) {
+//         if (field[cell] > MINE_CELL) {
+//             field[cell] -= COVER_FOR_CELL;
+//             if (field[cell] == EMPTY_CELL) {
+//                 find_empty_cells(cell);
+//             }
+//         }
+//     }
+
+//     if (current_col < (N_COLS - 1)) {
+//         cell = j - N_COLS + 1;
+//         if (cell >= 0) {
+//             if (field[cell] > MINE_CELL) {
+//                 field[cell] -= COVER_FOR_CELL;
+//                 if (field[cell] == EMPTY_CELL) {
+//                     find_empty_cells(cell);
+//                 }
+//             }
+//         }
+
+//         cell = j + N_COLS + 1;
+//         if (cell < allCells) {
+//             if (field[cell] > MINE_CELL) {
+//                 field[cell] -= COVER_FOR_CELL;
+//                 if (field[cell] == EMPTY_CELL) {
+//                     find_empty_cells(cell);
+//                 }
+//             }
+//         }
+
+//         cell = j + 1;
+//         if (cell < allCells) {
+//             if (field[cell] > MINE_CELL) {
+//                 field[cell] -= COVER_FOR_CELL;
+//                 if (field[cell] == EMPTY_CELL) {
+//                     find_empty_cells(cell);
+//                 }   
+//             }
+//         }
+//     }
+// }
 @Override
 public void paintComponent(Graphics g){
     super.paintComponent(g);
