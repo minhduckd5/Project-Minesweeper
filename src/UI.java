@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -11,6 +13,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Stack;
+
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -49,6 +53,7 @@ public class UI extends JPanel{
     private boolean inGame;
     private int minesLeft;
     private Image[] img;
+    private Stack<int[]> moveStack; //for undo
 
     private int allCells;
     private final JLabel status;
@@ -85,10 +90,42 @@ public class UI extends JPanel{
             }
         });
         
+          // Add key listener for undo functionality
+        setFocusable(true);
+        requestFocusInWindow();
+        addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+          if (e.getKeyCode() == KeyEvent.VK_Z) {
+              undoMove();
+          }
+      }
+  });
+}
+
+private void undoMove() {
+    if (!moveStack.isEmpty()) {
+        // Pop all moves related to the last action
+        while (!moveStack.isEmpty()) {
+            int[] lastMove = moveStack.pop();
+            int cellIndex = lastMove[0];
+            int cellValue = lastMove[1];
+            minesLeft = lastMove[2];
+            field[cellIndex] = cellValue;
+
+            // Check if the next move in the stack is from a different action
+            if (moveStack.isEmpty() || moveStack.peek()[2] != minesLeft) {
+                break;
+            }
+        }
+        status.setText(Integer.toString(minesLeft));
+        repaint();
     }
+}
 
 //auto resize initboard()
 public void initBoard() {
+    moveStack = new Stack<>();
     setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT)); //Set size of board
     img = new Image[NUM_IMAGES];                                //Create array of images
     for (int i = 0; i < NUM_IMAGES; i++) {
@@ -213,6 +250,10 @@ public void newGame(){
                 if ((dir == -N_COLS + 1 || dir == 1 || dir == N_COLS + 1) && current_col == (N_COLS - 1)) continue;
 
                 if (field[cell] > MINE_CELL) {
+
+                    // Push the state of each affected cell onto the stack
+                    moveStack.push(new int[]{cell, field[cell], minesLeft});
+
                     field[cell] -= COVER_FOR_CELL;
                     if (field[cell] == EMPTY_CELL) {
                         queue.add(cell);
@@ -404,6 +445,10 @@ private class MinesAdapter extends MouseAdapter{
         if((x < N_COLS * CELL_SIZE) && (y < N_ROWS * CELL_SIZE)){
             if(e.getButton() == MouseEvent.BUTTON3){
                 if(field[(cRow * N_COLS) + cCol] > MINE_CELL){
+
+                    // Push current state to stack
+                    moveStack.push(new int[]{cRow * N_COLS + cCol, field[cRow * N_COLS + cCol], minesLeft});
+
                     doRepaint = true;
 
                     if(field[(cRow * N_COLS) + cCol] <= COVERED_MINE_CELL){
@@ -426,6 +471,10 @@ private class MinesAdapter extends MouseAdapter{
                     return;
                 }
                 if((field[(cRow * N_COLS) + cCol] > MINE_CELL) && (field[(cRow * N_COLS) + cCol] < MARKED_MINE_CELL)){
+                    
+                     // Push current state to stack
+                    moveStack.push(new int[]{cRow * N_COLS + cCol, field[cRow * N_COLS + cCol], minesLeft});
+
                     field[(cRow * N_COLS) + cCol] -= COVER_FOR_CELL;
                     doRepaint = true;
 
