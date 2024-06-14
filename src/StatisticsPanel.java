@@ -18,7 +18,6 @@ public class StatisticsPanel extends JFrame {
 
     public StatisticsPanel(Minesweeper minesweeper) {
         this.minesweeper = minesweeper;
-        
         setTitle("Statistics");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -43,6 +42,7 @@ public class StatisticsPanel extends JFrame {
         add(difficultyPanel, BorderLayout.NORTH);
 
         statsTextArea = new JTextArea();
+        statsTextArea.setEditable(false);
         add(new JScrollPane(statsTextArea), BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
