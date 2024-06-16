@@ -1,8 +1,8 @@
 package src;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class MenuBar extends JMenuBar {
     // Field to store the Minesweeper instance
@@ -30,6 +30,14 @@ public class MenuBar extends JMenuBar {
             }
         });
         gameMenu.add(statisticsMenuItem);                        // Add Statistics item to Game menu
+        
+        JMenuItem saveGameItem = new JMenuItem("Save Game"); // Item "Save Game"
+        saveGameItem.addActionListener(e -> minesweeper.saveGame());
+        gameMenu.add(saveGameItem);                              // Add Save Game item to Game menu
+
+        JMenuItem loadGameItem = new JMenuItem("Load Game"); // Item "Load Game"
+        loadGameItem.addActionListener(e -> minesweeper.loadGame());
+        gameMenu.add(loadGameItem);                              // Add Load Game item to Game menu
         this.add(gameMenu);                                      // Add Game menu to MenuBar
 
          // Add Help menu with Tutorial item

@@ -14,7 +14,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
-
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -492,4 +491,38 @@ private class MinesAdapter extends MouseAdapter{
         }
     }
 }
+
+    // Getters for the current game state
+    public int[] getField() {
+        return field;
+    }
+
+    public boolean isInGame() {
+        return inGame;
+    }
+
+    public int getMinesLeft() {
+        return minesLeft;
+    }
+
+    public boolean isFirstClick() {
+        return firstclick;
+    }
+
+    // Setters for the current game state
+    public void setField(int[] field) {
+        this.field = field;
+    }
+    
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
+    }
+    
+    public void setMinesLeft(int minesLeft) {
+        this.minesLeft = minesLeft;
+    }
+    
+    public void setFirstClick(boolean firstClick) {
+        this.firstclick = firstClick;
+    }
 }
