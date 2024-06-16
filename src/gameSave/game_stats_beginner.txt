@@ -1,6 +1,6 @@
-Games Played: 3
+Games Played: 5
 Games Won: 1
-Win Percentage: 33.33333333333333
+Win Percentage: 20.0
 Longest Winning Streak: 1
-Longest Losing Streak: 1
+Longest Losing Streak: 3
 Current Streak: -1

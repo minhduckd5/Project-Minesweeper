@@ -27,13 +27,13 @@ public class GameStatsManager {
         }
     }
 
-    // Method to save all statistics (optional, not used directly now)
+    // Method to save all statistics
     public void saveAllStats() {
         beginnerStats.saveToFile();
         intermediateStats.saveToFile();
         advancedStats.saveToFile();
     }
-
+    // Method to reset all statistics
     public void resetAllStats() {
         beginnerStats.reset();
         intermediateStats.reset();

@@ -3,6 +3,7 @@ package src;
 import javax.swing.*;
 
 public class InputPanel {
+    // Fields to store width, height, number of mines and difficulty level
     private static int width;
     private static int height;
     private static int mines;
@@ -37,7 +38,7 @@ public class InputPanel {
                         validInput = true;
                         break;
                     default:                                                    //không thỏa mãn hết case
-                        validInput = false;                                     //set false tiếp
+                        validInput = false;                                     //set mặc định là false
                         while (!validInput) {                                   //while true
                         JTextField widthField = new JTextField(5);      //textfield để điền input
                         JTextField heightField = new JTextField(5);
@@ -63,31 +64,35 @@ public class InputPanel {
                             width = Integer.parseInt(widthField.getText());
                             height = Integer.parseInt(heightField.getText());
                             mines = Integer.parseInt(minesField.getText());
-                            if (width < 9 || height < 9 || mines < 10 || width > 30 || height > 24 || mines > 668) {
+                            if (width < 9 || height < 9 || mines < 10 || width > 30 || height > 24 || mines > 668) {                //contraints
                                 JOptionPane.showMessageDialog(null, "Width and height cannot be smaller than 9 and number of mines cannot be smaller than 10. Please enter again.",
                                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
                             } else{
                             validInput = true;
                             
                             }
-                        } catch (NumberFormatException e) {
+                        } catch (NumberFormatException e) {                                                                         //catch lỗi nhập chữ
                             JOptionPane.showMessageDialog(null, "Please enter only numbers.",
                                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
                         }
                     }else{
-                        difficulty = null;
+                        difficulty = null;                                                                                          //phần này bị dư(có thể bỏ)
                         break;
                         }
                     }
                     break;
                 }
             }
+
+        //chuyển input vừa chọn qua ui để start game
         UI.N_ROWS = height;
         UI.N_COLS = width;
         UI.N_MINES = mines;
         }
         
     }
+
+    // Getter for difficulty 
     public static String getSelectedDifficulty() {
         return difficulty;
     }

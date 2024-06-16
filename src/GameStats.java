@@ -121,7 +121,7 @@ public class GameStats {
             }
         }
     }
-
+    // Method to reset statistics
     public void reset() {
         gamesPlayed = 0;
         gamesWon = 0;
