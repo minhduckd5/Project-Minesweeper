@@ -10,9 +10,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 import java.util.Stack;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
@@ -154,71 +156,111 @@ public void newGame(){
     }
     status.setText(Integer.toString(minesLeft));
 }
-    private void placeMines(int emptyCell){
-        var random = new Random();
-        int cell;
-        int i = 0;
-    while (i < N_MINES) {
+    // private void placeMines(int emptyCell){
+    //     var random = new Random();
+    //     int cell;
+    //     int i = 0;
+    // while (i < N_MINES) {
 
-        int position = random.nextInt(allCells);
+    //     int position = random.nextInt(allCells);
 
-            if (position != emptyCell && field[position] != COVERED_MINE_CELL) {
+    //         if (position != emptyCell && field[position] != COVERED_MINE_CELL) {
 
-                int current_col = position % N_COLS;
+    //             int current_col = position % N_COLS;
+    //             field[position] = COVERED_MINE_CELL;
+    //             i++;
+
+    //             if (current_col > 0) {
+    //                 cell = position - 1 - N_COLS;
+    //                 if (cell >= 0) {
+    //                     if (field[cell] != COVERED_MINE_CELL) {
+    //                         field[cell] += 1;
+    //                     }
+    //                 }
+    //                 cell = position - 1;
+    //                 if (cell >= 0) {
+    //                     if (field[cell] != COVERED_MINE_CELL) {
+    //                         field[cell] += 1;
+    //                     }
+    //                 }
+
+    //                 cell = position + N_COLS - 1;
+    //                 if (cell < allCells) {
+    //                     if (field[cell] != COVERED_MINE_CELL) {
+    //                         field[cell] += 1;
+    //                     }
+    //                 }
+    //             }
+
+    //             cell = position - N_COLS;
+    //             if (cell >= 0) {
+    //                 if (field[cell] != COVERED_MINE_CELL) {
+    //                     field[cell] += 1;
+    //                 }
+    //             }
+
+    //             cell = position + N_COLS;
+    //             if (cell < allCells) {
+    //                 if (field[cell] != COVERED_MINE_CELL) {
+    //                     field[cell] += 1;
+    //                 }
+    //             }
+
+    //             if (current_col < (N_COLS - 1)) {
+    //                 cell = position - N_COLS + 1;
+    //                 if (cell >= 0) {
+    //                     if (field[cell] != COVERED_MINE_CELL) {
+    //                         field[cell] += 1;
+    //                     }
+    //                 }
+    //                 cell = position + N_COLS + 1;
+    //                 if (cell < allCells) {
+    //                     if (field[cell] != COVERED_MINE_CELL) {
+    //                         field[cell] += 1;
+    //                     }
+    //                 }
+    //                 cell = position + 1;
+    //                 if (cell < allCells) {
+    //                     if (field[cell] != COVERED_MINE_CELL) {
+    //                         field[cell] += 1;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+        private void placeMines(int emptyCell) {
+        Random random = new Random();
+        int minesPlaced = 0;
+
+        // Create a set to keep track of mine positions
+        Set<Integer> minePositions = new HashSet<>();
+
+        // Add the emptyCell to the set to ensure no mine is placed there
+        minePositions.add(emptyCell);
+
+        while (minesPlaced < N_MINES) {
+            int position = random.nextInt(allCells);
+
+            // If the position is not already a mine or the emptyCell, place a mine there
+            if (!minePositions.contains(position)) {
+                minePositions.add(position);
                 field[position] = COVERED_MINE_CELL;
-                i++;
+                minesPlaced++;
 
-                if (current_col > 0) {
-                    cell = position - 1 - N_COLS;
-                    if (cell >= 0) {
-                        if (field[cell] != COVERED_MINE_CELL) {
-                            field[cell] += 1;
-                        }
-                    }
-                    cell = position - 1;
-                    if (cell >= 0) {
-                        if (field[cell] != COVERED_MINE_CELL) {
-                            field[cell] += 1;
-                        }
-                    }
+                // Update adjacent cells' mine counts
+                int current_col = position % N_COLS;
+                int[] directions = {-N_COLS - 1, -N_COLS, -N_COLS + 1, -1, 1, N_COLS - 1, N_COLS, N_COLS + 1};
 
-                    cell = position + N_COLS - 1;
-                    if (cell < allCells) {
-                        if (field[cell] != COVERED_MINE_CELL) {
-                            field[cell] += 1;
+                for (int dir : directions) {
+                    int cell = position + dir;
+                    if (cell >= 0 && cell < allCells) {
+                        if (current_col == 0 && (dir == -N_COLS - 1 || dir == -1 || dir == N_COLS - 1)) {
+                            continue;
                         }
-                    }
-                }
-
-                cell = position - N_COLS;
-                if (cell >= 0) {
-                    if (field[cell] != COVERED_MINE_CELL) {
-                        field[cell] += 1;
-                    }
-                }
-
-                cell = position + N_COLS;
-                if (cell < allCells) {
-                    if (field[cell] != COVERED_MINE_CELL) {
-                        field[cell] += 1;
-                    }
-                }
-
-                if (current_col < (N_COLS - 1)) {
-                    cell = position - N_COLS + 1;
-                    if (cell >= 0) {
-                        if (field[cell] != COVERED_MINE_CELL) {
-                            field[cell] += 1;
+                        if (current_col == N_COLS - 1 && (dir == -N_COLS + 1 || dir == 1 || dir == N_COLS + 1)) {
+                            continue;
                         }
-                    }
-                    cell = position + N_COLS + 1;
-                    if (cell < allCells) {
-                        if (field[cell] != COVERED_MINE_CELL) {
-                            field[cell] += 1;
-                        }
-                    }
-                    cell = position + 1;
-                    if (cell < allCells) {
                         if (field[cell] != COVERED_MINE_CELL) {
                             field[cell] += 1;
                         }
