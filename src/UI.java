@@ -551,6 +551,19 @@ private class MinesAdapter extends MouseAdapter{
         return firstclick;
     }
 
+    public int getCoveredMineCell() {
+        return COVERED_MINE_CELL;
+    }
+    public int getMarkedMineCell() {
+        return MARKED_MINE_CELL;
+    }
+    public int getCellSize(){
+        return CELL_SIZE;
+    }
+    public int getMineCell(){
+        return MINE_CELL;
+    }
+
     // Setters for the current game state
     public void setField(int[] field) {
         this.field = field;

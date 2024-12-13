@@ -7,6 +7,7 @@ import javax.swing.*;
 public class MenuBar extends JMenuBar {
     // Field to store the Minesweeper instance
     private Minesweeper minesweeper;
+    private BOT bot;
 
     // Constructor to create the menu bar
     public MenuBar(Minesweeper minesweeper) {
@@ -40,6 +41,19 @@ public class MenuBar extends JMenuBar {
         gameMenu.add(loadGameItem);                              // Add Load Game item to Game menu
         this.add(gameMenu);                                      // Add Game menu to MenuBar
 
+
+               // Add new "Play Demo" item for auto-play
+        JMenuItem playDemoItem = new JMenuItem("Play Demo");
+        playDemoItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startBotDemo();  // Start the bot to play the game automatically
+            }
+        });
+        gameMenu.add(playDemoItem);  // Add the new Play Demo item to the Game menu
+
+        this.add(gameMenu);      // Add the Game menu to the MenuBar
+
          // Add Help menu with Tutorial item
          JMenu helpMenu = new JMenu("Help");                   // Menu "Help" 
          JMenuItem tutorialItem = new JMenuItem("Tutorial");// Item "Tutorial"
@@ -66,5 +80,28 @@ public class MenuBar extends JMenuBar {
     // Method to show tutorial
     private void showTutorial() {
         new TutorialFrame();            // Show tutorial class
+    }
+        // Method to start the bot demo play
+    // Method to start the bot demo play
+    private void startBotDemo() {
+        // Disable the menu items while the bot is playing
+        setMenuItemsEnabled(false);
+
+        // Start the bot to play the game automatically
+        new Thread(() -> {
+            bot.startPlaying();  // Let the bot play the game
+            // Re-enable the menu items after the bot finishes playing
+            SwingUtilities.invokeLater(() -> setMenuItemsEnabled(true));
+        }).start();
+    }
+
+    // Helper method to enable/disable menu items during the bot's demo
+    private void setMenuItemsEnabled(boolean enabled) {
+        for (int i = 0; i < getMenuCount(); i++) {
+            JMenu menu = getMenu(i);
+            for (int j = 0; j < menu.getItemCount(); j++) {
+                menu.getItem(j).setEnabled(enabled);
+            }
+        }
     }
 }
