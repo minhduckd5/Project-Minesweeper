@@ -25,6 +25,8 @@ import javax.swing.Timer;
 
 
 public class UI extends JPanel{
+    private static UI Instance; // Static reference to the active UI instance
+
     private final int NUM_IMAGES = 13; // 13 images for game
     private int CELL_SIZE = 15; //Size of cell
 
@@ -50,7 +52,7 @@ public class UI extends JPanel{
     private int BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
     private int BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
 
-    private int[] field;
+    public static int[] field;
     private boolean inGame;
     private int minesLeft;
     private Image[] img;
@@ -76,6 +78,7 @@ public class UI extends JPanel{
     public UI(GameEndListener gameEndListener,JLabel status) {
         this.status = status;
         this.gameEndListener = gameEndListener;
+        Instance = this;
         initBoard();
 
         addComponentListener(new ComponentAdapter() {
@@ -564,6 +567,12 @@ private class MinesAdapter extends MouseAdapter{
         return MINE_CELL;
     }
 
+    public static UI getInstance() {
+        if(Instance == null){
+            throw new IllegalStateException("UI is not initialized");
+        }
+        return Instance;
+    }
     // Setters for the current game state
     public void setField(int[] field) {
         this.field = field;

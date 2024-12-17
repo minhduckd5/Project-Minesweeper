@@ -10,8 +10,9 @@ public class MenuBar extends JMenuBar {
     private BOT bot;
 
     // Constructor to create the menu bar
-    public MenuBar(Minesweeper minesweeper) {
+    public MenuBar(Minesweeper minesweeper, BOT bot) {
         this.minesweeper = minesweeper;
+        this.bot = bot; // Initialize the bot instance
 
         JMenu gameMenu = new JMenu("Game");                             // Menu "Game"
         
@@ -84,6 +85,9 @@ public class MenuBar extends JMenuBar {
         // Method to start the bot demo play
     // Method to start the bot demo play
     private void startBotDemo() {
+        if (bot == null) {
+            JOptionPane.showMessageDialog(null, "Bot is not initialized","Error",JOptionPane.ERROR_MESSAGE);
+        }
         // Disable the menu items while the bot is playing
         setMenuItemsEnabled(false);
 
