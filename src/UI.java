@@ -573,6 +573,11 @@ private class MinesAdapter extends MouseAdapter{
         }
         return Instance;
     }
+
+    public int getEmptyCell() {
+        return EMPTY_CELL;
+    }
+    
     // Setters for the current game state
     public void setField(int[] field) {
         this.field = field;
