@@ -86,6 +86,7 @@ public UI(GameEndListener gameEndListener,JLabel status) {
                 // Recalculate the board width and height
                 BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
                 BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
+                
                 // Redraw the board
                 repaint();
             }
@@ -143,20 +144,29 @@ newGame();                                                  //Start new game
 }
 public void newGame(){
     SoundPlayer.playSound("start.wav");
-
+    
     inGame = true;         
     firstclick = true;                                     //Game is running
     minesLeft = N_MINES;                                        //Number of mines left <= number of mines at start
 
     allCells = N_ROWS * N_COLS;                                 //Number of cells
     field = new int[allCells];                                  //Create array of cells
-
     for (int i = 0; i < allCells; i++) {
         field[i] = COVER_FOR_CELL;                              //Cover all cells (10.png)
     }
+    
     status.setText(Integer.toString(minesLeft));
+   
+    
 }
-    // private void placeMines(int emptyCell){
+
+private void calculateBoardSize(int width, int height) {
+    CELL_SIZE = Math.min((width) / N_COLS, (height) / N_ROWS);
+    BOARD_WIDTH = N_COLS * CELL_SIZE ;
+    BOARD_HEIGHT = N_ROWS * CELL_SIZE;
+    setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
+  }
+// private void placeMines(int emptyCell){
     //     var random = new Random();
     //     int cell;
     //     int i = 0;
@@ -397,6 +407,11 @@ public void newGame(){
 @Override
 public void paintComponent(Graphics g){
     super.paintComponent(g);
+
+    // Check if the component has a valid size
+    if (getWidth() > 0 && getHeight() > 0) {
+        calculateBoardSize(getWidth(), getHeight());
+    }
 
     // Calculate the top left corner (x,y) to start drawing so the board will be centered
     int boardTopLeftX = (getWidth() - BOARD_WIDTH) / 2;

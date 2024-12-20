@@ -70,6 +70,7 @@ public class Minesweeper extends JFrame implements GameEndListener {
     public void startNewGame() {
         ui.newGame(); // Start a new game in the UI
         ui.repaint(); // Repaint the UI to reflect changes
+        
     }
     @Override
     public void endGame(boolean won) {
