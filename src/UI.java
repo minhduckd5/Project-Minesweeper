@@ -73,7 +73,7 @@ public class UI extends JPanel{
     }
 
 
-    public UI(GameEndListener gameEndListener,JLabel status) {
+public UI(GameEndListener gameEndListener,JLabel status) {
         this.status = status;
         this.gameEndListener = gameEndListener;
         initBoard();
@@ -229,7 +229,7 @@ public void newGame(){
     //         }
     //     }
     // }
-        private void placeMines(int emptyCell) {
+    private void placeMines(int emptyCell) {
         Random random = new Random();
         int minesPlaced = 0;
 
@@ -451,7 +451,7 @@ private void showGameOverDialog(boolean won) {
     gameEndListener.endGame(won); // Notify the game end listener
     
     String message = won ? "Congratulations! You won! Do you want to play again?" : "You lost! Do you want to play again?";
-    Timer timer = new Timer(2000, e -> {
+    Timer timer = new Timer(100, e -> {
     int option = JOptionPane.showConfirmDialog(this, message, "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 
     if (option == JOptionPane.YES_OPTION) {
@@ -467,13 +467,16 @@ private class MinesAdapter extends MouseAdapter{
     @Override
     public void mousePressed(MouseEvent e){
         // Adjust the mouse click coordinates
-        int x = e.getX() - (getWidth() - N_COLS * CELL_SIZE) / 2;
+        int x = e.getX() - (getWidth() - N_COLS * CELL_SIZE) / 2 ;
         int y = e.getY() - (getHeight() - N_ROWS * CELL_SIZE) / 2;
 
         int cCol = x / CELL_SIZE;
         int cRow = y / CELL_SIZE;
 
         boolean doRepaint = false;
+        if (cCol < 0 || cRow < 0 || cCol >= N_COLS || cRow >= N_ROWS) {
+            return; // Ignore clicks outside the board
+        }
 
         if(!inGame){
             newGame();
