@@ -595,7 +595,21 @@ private class MinesAdapter extends MouseAdapter{
     public int getEmptyCell() {
         return EMPTY_CELL;
     }
-    
+    public int getBoardTopLeftX() {
+        return  (getWidth() - BOARD_WIDTH) / 2;
+    }
+    public int getBoardTopLeftY() {
+        return (getHeight() - BOARD_HEIGHT) / 2;
+    }
+
+public int getFlaggedCell() {
+    return COVERED_MINE_CELL + MARK_FOR_CELL;
+}
+public int getCoveredEmptyCell() {
+    return COVER_FOR_CELL;
+}
+
+
     // Setters for the current game state
     public void setField(int[] field) {
         this.field = field;
