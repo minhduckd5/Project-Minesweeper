@@ -575,9 +575,6 @@ private class MinesAdapter extends MouseAdapter{
     public int getCoveredMineCell() {
         return COVERED_MINE_CELL;
     }
-    public int getMarkedMineCell() {
-        return MARKED_MINE_CELL;
-    }
     public int getCellSize(){
         return CELL_SIZE;
     }
@@ -591,10 +588,6 @@ private class MinesAdapter extends MouseAdapter{
         }
         return Instance;
     }
-
-    public int getEmptyCell() {
-        return EMPTY_CELL;
-    }
     public int getBoardTopLeftX() {
         return  (getWidth() - BOARD_WIDTH) / 2;
     }
@@ -602,12 +595,12 @@ private class MinesAdapter extends MouseAdapter{
         return (getHeight() - BOARD_HEIGHT) / 2;
     }
 
-public int getFlaggedCell() {
-    return COVERED_MINE_CELL + MARK_FOR_CELL;
-}
-public int getCoveredEmptyCell() {
-    return COVER_FOR_CELL;
-}
+    public int getFlaggedCell() {
+        return COVERED_MINE_CELL + MARK_FOR_CELL;
+    }
+    public int getCoveredEmptyCell() {
+        return COVER_FOR_CELL;
+    }
 
 
     // Setters for the current game state

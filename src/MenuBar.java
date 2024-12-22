@@ -44,7 +44,7 @@ public class MenuBar extends JMenuBar {
 
 
                // Add new "Play Demo" item for auto-play
-        JMenuItem playDemoItem = new JMenuItem("Play Demo");
+        JMenuItem playDemoItem = new JMenuItem("Show Hint");
         playDemoItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
