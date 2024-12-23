@@ -19,14 +19,13 @@ public class BOT {
             int rows = ui.getN_ROWS();
             int cols = ui.getN_COLS();
             int cellSize = ui.getCellSize();
-            int y = 50;
             
             // Top-left corner of the board
             int boardTopLeftX = ui.getBoardTopLeftX();
             int boardTopLeftY = ui.getBoardTopLeftY();
 
-            for (int row = 1; row <= rows+1; row++) {
-                for (int col = 0; col <= cols; col++) {
+            for (int row = 0; row < rows; row++) {
+                for (int col = 0; col < cols; col++) {
                     int index = row * cols + col;
 
                     // Skip mines and flagged cells
@@ -42,7 +41,7 @@ public class BOT {
 
                         // Adjust the x, y position to correctly align with the cell size and board position
                         int x = boardTopLeftX + (col * cellSize) + (cellSize / 2);
-                         y = boardTopLeftY + (row * cellSize) + (cellSize / 2);
+                        int y = boardTopLeftY + (row * cellSize) + (cellSize / 2);
 
                                                 // Ensure the calculated x and y are within the board boundaries
                         if (x >= boardTopLeftX && x < (boardTopLeftX + cols * cellSize) &&
@@ -52,7 +51,7 @@ public class BOT {
                         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
                         // Add delays to simulate human interaction
-                        Thread.sleep(100);
+                        Thread.sleep(500);
                  }
                 }
                           // Check for empty cells to uncover adjacent cells
