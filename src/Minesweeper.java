@@ -26,13 +26,14 @@ public class Minesweeper extends JFrame implements GameEndListener {
         // Initialize input panel to get user inputs
         InputPanel.getInput();
 
+        // UI with the current instance of Minesweeper and status label
+        ui = new UI(this, status);
+
         // Create the menu bar and pass the current instance of Minesweeper to it
-        MenuBar menuBar = new MenuBar(this);
+        MenuBar menuBar = new MenuBar(this, new BOT(ui));
         // Add the menu bar to the frame
         setJMenuBar(menuBar);
 
-        // UI with the current instance of Minesweeper and status label
-        ui = new UI(this, status);
         add(status, BorderLayout.SOUTH); // Add status label at the bottom of the frame
         add(ui); // Add the UI component to the frame
 
@@ -70,6 +71,7 @@ public class Minesweeper extends JFrame implements GameEndListener {
     public void startNewGame() {
         ui.newGame(); // Start a new game in the UI
         ui.repaint(); // Repaint the UI to reflect changes
+        
     }
     @Override
     public void endGame(boolean won) {

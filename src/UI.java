@@ -25,6 +25,8 @@ import javax.swing.Timer;
 
 
 public class UI extends JPanel{
+    private static UI Instance; // Static reference to the active UI instance
+
     private final int NUM_IMAGES = 13; // 13 images for game
     private int CELL_SIZE = 15; //Size of cell
 
@@ -50,7 +52,7 @@ public class UI extends JPanel{
     private int BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
     private int BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
 
-    private int[] field;
+    public static int[] field;
     private boolean inGame;
     private int minesLeft;
     private Image[] img;
@@ -73,9 +75,10 @@ public class UI extends JPanel{
     }
 
 
-    public UI(GameEndListener gameEndListener,JLabel status) {
+public UI(GameEndListener gameEndListener,JLabel status) {
         this.status = status;
         this.gameEndListener = gameEndListener;
+        Instance = this;
         initBoard();
 
         addComponentListener(new ComponentAdapter() {
@@ -86,6 +89,7 @@ public class UI extends JPanel{
                 // Recalculate the board width and height
                 BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
                 BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
+                
                 // Redraw the board
                 repaint();
             }
@@ -143,20 +147,29 @@ newGame();                                                  //Start new game
 }
 public void newGame(){
     SoundPlayer.playSound("start.wav");
-
+    
     inGame = true;         
     firstclick = true;                                     //Game is running
     minesLeft = N_MINES;                                        //Number of mines left <= number of mines at start
 
     allCells = N_ROWS * N_COLS;                                 //Number of cells
     field = new int[allCells];                                  //Create array of cells
-
     for (int i = 0; i < allCells; i++) {
         field[i] = COVER_FOR_CELL;                              //Cover all cells (10.png)
     }
+    
     status.setText(Integer.toString(minesLeft));
+   
+    
 }
-    // private void placeMines(int emptyCell){
+
+private void calculateBoardSize(int width, int height) {
+    CELL_SIZE = Math.min((width) / N_COLS, (height) / N_ROWS);
+    BOARD_WIDTH = N_COLS * CELL_SIZE ;
+    BOARD_HEIGHT = N_ROWS * CELL_SIZE;
+    setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
+  }
+// private void placeMines(int emptyCell){
     //     var random = new Random();
     //     int cell;
     //     int i = 0;
@@ -229,7 +242,7 @@ public void newGame(){
     //         }
     //     }
     // }
-        private void placeMines(int emptyCell) {
+    private void placeMines(int emptyCell) {
         Random random = new Random();
         int minesPlaced = 0;
 
@@ -398,6 +411,11 @@ public void newGame(){
 public void paintComponent(Graphics g){
     super.paintComponent(g);
 
+    // Check if the component has a valid size
+    if (getWidth() > 0 && getHeight() > 0) {
+        calculateBoardSize(getWidth(), getHeight());
+    }
+
     // Calculate the top left corner (x,y) to start drawing so the board will be centered
     int boardTopLeftX = (getWidth() - BOARD_WIDTH) / 2;
     int boardTopLeftY = (getHeight() - BOARD_HEIGHT) / 2;
@@ -451,7 +469,7 @@ private void showGameOverDialog(boolean won) {
     gameEndListener.endGame(won); // Notify the game end listener
     
     String message = won ? "Congratulations! You won! Do you want to play again?" : "You lost! Do you want to play again?";
-    Timer timer = new Timer(2000, e -> {
+    Timer timer = new Timer(100, e -> {
     int option = JOptionPane.showConfirmDialog(this, message, "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 
     if (option == JOptionPane.YES_OPTION) {
@@ -467,13 +485,16 @@ private class MinesAdapter extends MouseAdapter{
     @Override
     public void mousePressed(MouseEvent e){
         // Adjust the mouse click coordinates
-        int x = e.getX() - (getWidth() - N_COLS * CELL_SIZE) / 2;
+        int x = e.getX() - (getWidth() - N_COLS * CELL_SIZE) / 2 ;
         int y = e.getY() - (getHeight() - N_ROWS * CELL_SIZE) / 2;
 
         int cCol = x / CELL_SIZE;
         int cRow = y / CELL_SIZE;
 
         boolean doRepaint = false;
+        if (cCol < 0 || cRow < 0 || cCol >= N_COLS || cRow >= N_ROWS) {
+            return; // Ignore clicks outside the board
+        }
 
         if(!inGame){
             newGame();
@@ -550,6 +571,37 @@ private class MinesAdapter extends MouseAdapter{
     public boolean isFirstClick() {
         return firstclick;
     }
+
+    public int getCoveredMineCell() {
+        return COVERED_MINE_CELL;
+    }
+    public int getCellSize(){
+        return CELL_SIZE;
+    }
+    public int getMineCell(){
+        return MINE_CELL;
+    }
+
+    public static UI getInstance() {
+        if(Instance == null){
+            throw new IllegalStateException("UI is not initialized");
+        }
+        return Instance;
+    }
+    public int getBoardTopLeftX() {
+        return  (getWidth() - BOARD_WIDTH) / 2;
+    }
+    public int getBoardTopLeftY() {
+        return (getHeight() - BOARD_HEIGHT) / 2;
+    }
+
+    public int getFlaggedCell() {
+        return COVERED_MINE_CELL + MARK_FOR_CELL;
+    }
+    public int getCoveredEmptyCell() {
+        return COVER_FOR_CELL;
+    }
+
 
     // Setters for the current game state
     public void setField(int[] field) {
