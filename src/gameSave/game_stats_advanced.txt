@@ -1,6 +1,15 @@
+<<<<<<< Updated upstream
 Games Played: 0
 Games Won: 0
 Win Percentage: 0.0
 Longest Winning Streak: 0
 Longest Losing Streak: 0
 Current Streak: 0
+=======
+Games Played: 22
+Games Won: 1
+Win Percentage: 4.545454545454546
+Longest Winning Streak: 1
+Longest Losing Streak: 3
+Current Streak: -9
+>>>>>>> Stashed changes
