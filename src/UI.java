@@ -105,21 +105,74 @@ public UI(GameEndListener gameEndListener,JLabel status) {
   });
 }
 
+// private void undoMove() {
+//     if (!moveStack.isEmpty()) {
+//         // Pop all moves related to the last action
+//         while (!moveStack.isEmpty()) {
+//             int[] lastMove = moveStack.pop();
+//             int cellIndex = lastMove[0];
+//             int cellValue = lastMove[1];
+//             minesLeft = lastMove[2];
+//             field[cellIndex] = cellValue;
+
+//             // Check if the next move in the stack is from a different action
+//             if (moveStack.isEmpty() || moveStack.peek()[2] != minesLeft) {
+//                 break;
+//             }
+//         }
+//         status.setText(Integer.toString(minesLeft));
+//         repaint();
+//     }
+// }
+// private void undoMove() {
+//     if (!moveStack.isEmpty()) {
+//         // Undo actions until the end of the last action group
+//         while (!moveStack.isEmpty()) {
+//             int[] lastMove = moveStack.pop();
+
+//             // Check for sentinel (start of action group)
+//             if (lastMove[0] == -1 && lastMove[3] == 2) {
+//                 break; // End of chain uncover group
+//             }
+
+//             // Restore the previous state
+//             int cellIndex = lastMove[0];
+//             int cellValue = lastMove[1];
+//             minesLeft = lastMove[2];
+//             field[cellIndex] = cellValue;
+//         }
+
+//         // Update UI
+//         status.setText(Integer.toString(minesLeft));
+//         repaint();
+//     }
+// }
 private void undoMove() {
     if (!moveStack.isEmpty()) {
-        // Pop all moves related to the last action
-        while (!moveStack.isEmpty()) {
+        boolean isUndoing = true;
+
+        while (isUndoing && !moveStack.isEmpty()) {
             int[] lastMove = moveStack.pop();
+
+            // Handle end sentinel
+            if (lastMove[0] == -2) {
+                continue; // Skip the end sentinel
+            }
+
+            // Handle start sentinel
+            if (lastMove[0] == -1) {
+                isUndoing = false; // Stop undoing when start sentinel is found
+                continue;
+            }
+
+            // Restore the previous state
             int cellIndex = lastMove[0];
             int cellValue = lastMove[1];
             minesLeft = lastMove[2];
             field[cellIndex] = cellValue;
-
-            // Check if the next move in the stack is from a different action
-            if (moveStack.isEmpty() || moveStack.peek()[2] != minesLeft) {
-                break;
-            }
         }
+
+        // Update UI
         status.setText(Integer.toString(minesLeft));
         repaint();
     }
@@ -166,79 +219,7 @@ private void calculateBoardSize(int width, int height) {
     BOARD_HEIGHT = N_ROWS * CELL_SIZE;
     setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
   }
-// private void placeMines(int emptyCell){
-    //     var random = new Random();
-    //     int cell;
-    //     int i = 0;
-    // while (i < N_MINES) {
 
-    //     int position = random.nextInt(allCells);
-
-    //         if (position != emptyCell && field[position] != COVERED_MINE_CELL) {
-
-    //             int current_col = position % N_COLS;
-    //             field[position] = COVERED_MINE_CELL;
-    //             i++;
-
-    //             if (current_col > 0) {
-    //                 cell = position - 1 - N_COLS;
-    //                 if (cell >= 0) {
-    //                     if (field[cell] != COVERED_MINE_CELL) {
-    //                         field[cell] += 1;
-    //                     }
-    //                 }
-    //                 cell = position - 1;
-    //                 if (cell >= 0) {
-    //                     if (field[cell] != COVERED_MINE_CELL) {
-    //                         field[cell] += 1;
-    //                     }
-    //                 }
-
-    //                 cell = position + N_COLS - 1;
-    //                 if (cell < allCells) {
-    //                     if (field[cell] != COVERED_MINE_CELL) {
-    //                         field[cell] += 1;
-    //                     }
-    //                 }
-    //             }
-
-    //             cell = position - N_COLS;
-    //             if (cell >= 0) {
-    //                 if (field[cell] != COVERED_MINE_CELL) {
-    //                     field[cell] += 1;
-    //                 }
-    //             }
-
-    //             cell = position + N_COLS;
-    //             if (cell < allCells) {
-    //                 if (field[cell] != COVERED_MINE_CELL) {
-    //                     field[cell] += 1;
-    //                 }
-    //             }
-
-    //             if (current_col < (N_COLS - 1)) {
-    //                 cell = position - N_COLS + 1;
-    //                 if (cell >= 0) {
-    //                     if (field[cell] != COVERED_MINE_CELL) {
-    //                         field[cell] += 1;
-    //                     }
-    //                 }
-    //                 cell = position + N_COLS + 1;
-    //                 if (cell < allCells) {
-    //                     if (field[cell] != COVERED_MINE_CELL) {
-    //                         field[cell] += 1;
-    //                     }
-    //                 }
-    //                 cell = position + 1;
-    //                 if (cell < allCells) {
-    //                     if (field[cell] != COVERED_MINE_CELL) {
-    //                         field[cell] += 1;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
     private void placeMines(int emptyCell) {
         Random random = new Random();
         int minesPlaced = 0;
@@ -280,10 +261,13 @@ private void calculateBoardSize(int width, int height) {
         }
     }
     private void find_empty_cells(int j) {
-    Queue<Integer> queue = new LinkedList<>();
-    queue.add(j);
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(j);
 
-    while (!queue.isEmpty()) {
+        // Add a sentinel to mark the start of this chain uncover action
+        moveStack.push(new int[]{-1, -1, -1, 2}); // Action type 2: chain uncover start
+
+        while (!queue.isEmpty()) {
         int cellPos = queue.poll();
         int current_col = cellPos % N_COLS;
         int cell;
@@ -303,7 +287,7 @@ private void calculateBoardSize(int width, int height) {
                 if (field[cell] > MINE_CELL) {
 
                     // Push the state of each affected cell onto the stack
-                    moveStack.push(new int[]{cell, field[cell], minesLeft});
+                    moveStack.push(new int[]{cell, field[cell], minesLeft,2});
 
                     field[cell] -= COVER_FOR_CELL;
                     if (field[cell] == EMPTY_CELL) {
@@ -313,97 +297,10 @@ private void calculateBoardSize(int width, int height) {
             }
         }
     }
+        // Add a sentinel to mark the end of this chain uncover action
+        moveStack.push(new int[]{-2, -2, -2, 2}); // Action type 2: chain uncover end
 }
 
-
-// private void find_empty_cells(int j){
-//     int current_col = j % N_COLS;
-//     int cell;
-
-//     if (current_col > 0) {
-//         cell = j - N_COLS - 1;
-//         if (cell >= 0) {
-//             if (field[cell] > MINE_CELL) {
-//                 field[cell] -= COVER_FOR_CELL;
-//                 if (field[cell] == EMPTY_CELL) {
-//                     find_empty_cells(cell);
-//                 }
-//             }
-//         }
-
-//         cell = j - 1;
-//         if (cell >= 0) {
-//             if (field[cell] > MINE_CELL) {
-//                 field[cell] -= COVER_FOR_CELL;
-//                 if (field[cell] == EMPTY_CELL) {
-//                     find_empty_cells(cell);
-//                 }
-//             }
-//         }
-
-//         cell = j + N_COLS - 1;
-//         if (cell < allCells) {
-//             if (field[cell] > MINE_CELL) {
-//                 field[cell] -= COVER_FOR_CELL;
-//                 if (field[cell] == EMPTY_CELL) {
-//                     find_empty_cells(cell);
-//                 }
-//             }
-//         }
-//     }
-
-//     cell = j - N_COLS;
-//     if (cell >= 0) {
-//         if (field[cell] > MINE_CELL) {
-//             field[cell] -= COVER_FOR_CELL;
-//             if (field[cell] == EMPTY_CELL) {
-//                 find_empty_cells(cell);
-//             }
-//         }
-//     }
-
-//     cell = j + N_COLS;
-//     if (cell < allCells) {
-//         if (field[cell] > MINE_CELL) {
-//             field[cell] -= COVER_FOR_CELL;
-//             if (field[cell] == EMPTY_CELL) {
-//                 find_empty_cells(cell);
-//             }
-//         }
-//     }
-
-//     if (current_col < (N_COLS - 1)) {
-//         cell = j - N_COLS + 1;
-//         if (cell >= 0) {
-//             if (field[cell] > MINE_CELL) {
-//                 field[cell] -= COVER_FOR_CELL;
-//                 if (field[cell] == EMPTY_CELL) {
-//                     find_empty_cells(cell);
-//                 }
-//             }
-//         }
-
-//         cell = j + N_COLS + 1;
-//         if (cell < allCells) {
-//             if (field[cell] > MINE_CELL) {
-//                 field[cell] -= COVER_FOR_CELL;
-//                 if (field[cell] == EMPTY_CELL) {
-//                     find_empty_cells(cell);
-//                 }
-//             }
-//         }
-
-//         cell = j + 1;
-//         if (cell < allCells) {
-//             if (field[cell] > MINE_CELL) {
-//                 field[cell] -= COVER_FOR_CELL;
-//                 if (field[cell] == EMPTY_CELL) {
-//                     find_empty_cells(cell);
-//                 }   
-//             }
-//         }
-//     }
-// }
 @Override
 public void paintComponent(Graphics g){
     super.paintComponent(g);
@@ -506,7 +403,7 @@ private class MinesAdapter extends MouseAdapter{
                 if(field[(cRow * N_COLS) + cCol] > MINE_CELL){
 
                     // Push current state to stack
-                    moveStack.push(new int[]{cRow * N_COLS + cCol, field[cRow * N_COLS + cCol], minesLeft});
+                    moveStack.push(new int[]{cRow * N_COLS + cCol, field[cRow * N_COLS + cCol], minesLeft,0}); //mark and unmark: 0
 
                     doRepaint = true;
 
@@ -531,8 +428,11 @@ private class MinesAdapter extends MouseAdapter{
                 }
                 if((field[(cRow * N_COLS) + cCol] > MINE_CELL) && (field[(cRow * N_COLS) + cCol] < MARKED_MINE_CELL)){
                     
+                    // Add a sentinel to mark the start of this single uncover action
+                    moveStack.push(new int[]{-1, -1, -1, 1}); // Action type 1: single uncover start
+
                      // Push current state to stack
-                    moveStack.push(new int[]{cRow * N_COLS + cCol, field[cRow * N_COLS + cCol], minesLeft});
+                    moveStack.push(new int[]{cRow * N_COLS + cCol, field[cRow * N_COLS + cCol], minesLeft,1}); //single uncover
 
                     field[(cRow * N_COLS) + cCol] -= COVER_FOR_CELL;
                     doRepaint = true;
@@ -543,6 +443,8 @@ private class MinesAdapter extends MouseAdapter{
                     if(field[(cRow * N_COLS) + cCol] == EMPTY_CELL){
                         find_empty_cells((cRow * N_COLS) + cCol);
                     }
+                    // Add a sentinel to mark the end of this single uncover action
+                    moveStack.push(new int[]{-2, -2, -2, 1}); // Action type 1: single uncover end
                 }
             }
             if(doRepaint){
