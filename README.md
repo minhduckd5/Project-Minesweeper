@@ -34,6 +34,7 @@ MSC. Thai Trung Tin - tttin@hcmiu.edu.vn
 
 # Members:
 Nguyễn Huỳnh Minh Đức              ITCSIU22218        https://github.com/minhduckd5
+
 Nguyễn Thành Nam                   ITCSIU22311        https://github.com/NguyenThanhNamIT
 # References:
 1. Kenny Yip Coding: Code Minesweeper in Java - https://youtu.be/5VrMVSDjeso?si=7DunNwlQYjqljBsp
