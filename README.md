@@ -1,7 +1,5 @@
 # THIS IS A SCHOOL PROJECT AND NOT CREATED FOR MONETIZATION.
-# Project Name
-
-# Minesweeper Game with Undo Functionality and Tutorial Bot
+# Project Name: Minesweeper Game with Undo Functionality and Tutorial Bot
 
 ![menu art](resources/minesweepericon.png)
 
