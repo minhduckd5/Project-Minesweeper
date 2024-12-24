@@ -11,17 +11,24 @@ This project is an enhanced version of the classic Minesweeper game, built in Ja
 Undo Move Functionality:
 
 Players can undo their last move, whether it was uncovering a single cell or triggering a chain uncover.
+
 This ensures strategic flexibility and allows for corrections during gameplay.
+
 Interactive Tutorial Bot:
 
 A built-in bot guides new players through the gameplay mechanics.
+
 The bot provides helpful tips, and demonstrates sample moves to ensure a smooth onboarding experience.
 
 # Features
 Classic Minesweeper Gameplay: Includes uncovering cells, marking mines, and avoiding detonations.
+
 Undo Capability: Redo incorrect moves or explore alternate strategies.
+
 Tutorial Bot: Learn Minesweeper with step-by-step instructions.
+
 Dynamic UI: Visual updates to track your progress and remaining mines.
+
 This implementation aims to enhance the player experience by making the game more accessible and forgiving while retaining the challenge and fun of Minesweeper!
 
 # School
