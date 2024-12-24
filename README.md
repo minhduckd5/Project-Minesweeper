@@ -1,15 +1,28 @@
 # THIS IS A SCHOOL PROJECT AND NOT CREATED FOR MONETIZATION.
 # Project Name
-JAVA MINESWEEPER
+
+Minesweeper Game with Undo Functionality and Tutorial Bot
 
 ![menu art](resources/minesweepericon.png)
 
-    + Mine: describes as an explosive.
-    
-    + Sweeper: describes a person that finds and cleans a field of mines
-
 # Description
-Welcome to Minesweeper! You can test your mind how good you are at strategy with this classic logic-based puzzle game. A field of squares will be shown to you at the start, and some of them will hide dangerous mines beneath. Your job is to clear the field without triggering any bombs. When you click on a square, you can see what's underneath: a number that tells you how many mines are next to it, an empty spot, or a mine itself. Use the numbers as clues to mark all suspicious mines and safely dig up all the squares that aren't mined (using flags). Exciting reasoning and strategy games to play as you try to clear the board without getting boom boom shakalaka. Have fun and good luck!
+This project is an enhanced version of the classic Minesweeper game, built in Java, featuring:
+
+Undo Move Functionality:
+
+Players can undo their last move, whether it was uncovering a single cell or triggering a chain uncover.
+This ensures strategic flexibility and allows for corrections during gameplay.
+Interactive Tutorial Bot:
+
+A built-in bot guides new players through the gameplay mechanics.
+The bot provides helpful tips, and demonstrates sample moves to ensure a smooth onboarding experience.
+
+# Features
+Classic Minesweeper Gameplay: Includes uncovering cells, marking mines, and avoiding detonations.
+Undo Capability: Redo incorrect moves or explore alternate strategies.
+Tutorial Bot: Learn Minesweeper with step-by-step instructions.
+Dynamic UI: Visual updates to track your progress and remaining mines.
+This implementation aims to enhance the player experience by making the game more accessible and forgiving while retaining the challenge and fun of Minesweeper!
 
 # School
 International University - HCMIU.
